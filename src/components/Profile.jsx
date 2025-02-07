@@ -23,6 +23,7 @@ import avacado from "../Images/avacado.png"
 import watermaleon from "../Images/watermaleon.png"
 import pizza from "../Images/pizza.png"
 import disc from "../Images/disc.png"
+import { useNavigate } from "react-router-dom"
 
 
 const Profile = () => {
@@ -53,6 +54,7 @@ const Profile = () => {
     const [FirebaseDoctor, setFirebaseDoctor] = useState([]);
     const [FirebaseAdmin, setFirebaseAdmin] = useState([]);
     const [ImgSrc, setImgSrc] = useState("");
+    const navigate = useNavigate();
 
     const doctor = FirebaseDoctor.find(item => item.code === PINcode);
     const user = FirebaseAdmin.find(item => item.code === PINcode);
@@ -152,9 +154,10 @@ const Profile = () => {
 
     const loginOut = () => {
         localStorage.removeItem("PINcode");
-        window.location.reload();
+        setTimeout(() => {
+            window.location.href = "/"
+        }, 500);
     };
-
     return (
         <div className="categories">
             {user || doctor ? (
