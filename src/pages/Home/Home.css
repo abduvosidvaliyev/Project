@@ -1,0 +1,187 @@
+.Home {
+    width: 95%;
+    height: 100vh;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.HomeNavbar {
+    width: 100%;
+    height: 110px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 1.5%;
+    gap: 15px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: #ECECEC;
+}
+
+.HomeNavbar > h3 {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.categories {
+    width: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    position: relative;
+}
+
+.navbarButtons {
+    width: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.navbarButtons button {
+    border: 2px solid transparent;
+    padding: 5px 15px;
+    background: transparent;
+    border-radius: 30px;
+    color: #000;
+}
+
+.users {
+    width: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.users img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+.users h3 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.users .textImg {
+    width: 45px;
+    height: 45px;
+    font-size: 20px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+.weitlist {
+    width: 100%;
+    padding: 15px 1.5%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: start;
+    gap: 15px;
+    position: relative;
+}
+
+/* Profil uchun kod */
+
+.usersInfo{
+    width: 220px;
+    height: auto;
+    padding: 10px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px #ECECEC;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+    position: absolute;
+    right: 30px;
+    transition: 0.3s;
+    border: 1px solid #ECECEC;
+}
+
+.usersInfo > svg{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
+.usersInfo > img{
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 50%;
+    align-self: center;
+    cursor: pointer;
+}
+
+.usersInfo .textImg{
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 50%;
+    align-self: center;
+    cursor: pointer;
+}
+
+.usersInfo p{
+    color: red;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.usersInfo p svg{
+    width: 18px;
+    height: 18px;
+}
+
+/* Rasm almashtirish uchun */
+
+.images {
+    width: 225px;
+    height: auto;
+    padding: 10px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px #ECECEC;
+    border: 2px solid #ECECEC;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 10px;
+    position: absolute;
+    left: -100%;
+    transition: 0.5s;
+}
+
+.images img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+.images svg{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+}

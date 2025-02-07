@@ -1,0 +1,160 @@
+.weitlistPage{
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.weitlistContainer{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.weitNavbar{
+    width: 100%;
+    height: 95px;
+    background: #ececec;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 20px 0px 40px;
+}
+
+.weitNavbar > h3{
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.weitCustomers{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.weitTable{
+    width: 100%;
+    height: 100vh;
+}
+
+.filterNav{
+    width: 100%;
+    height: 75px;
+    background: #C66E6E;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 50px 0px 20px;
+}
+
+.filtered{
+    height: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 30px;
+}
+
+.filterNav input{
+    padding: 5px 15px;
+    border-radius: 5px;
+    outline: none;
+}
+
+.filtered select{
+    padding: 6.6px 15px;
+    border-radius: 5px;
+    outline: none;
+    color: #9EA5B0;
+}
+
+.filterNav select option{
+    color: #000;
+}
+
+.filterNav svg{
+    color: #9EA5B0;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.usersFilter{
+    width: 100%;
+}
+
+.weitCustomers{
+    padding: 20px 25px;
+}
+
+.usersFilter thead td{
+    font-size: 18px;
+    font-weight: 500;
+    padding: 0px 30px;
+    height: 60px;
+    background: #ececec;
+}
+
+.usersFilter tbody tr td{
+    height: 60px;
+    padding: 0px 30px;
+    font-size: 17px;
+    font-size: 500;
+}
+
+.alertContainer{
+    width: 100%;
+    height: 100vh;
+    background: #00000090;
+    backdrop-filter: blur(3px);
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.pagination li {
+    list-style: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 5px;
+    background: #fff;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.pagination .active {
+    background: black;
+    color: white;
+}
+
+.pagination li:hover {
+    background: #f0f0f0;
+    color: #000;
+}
+
+.pagination li a {
+    text-decoration: none;
+    color: inherit;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.controls{
+    width: 100%;
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

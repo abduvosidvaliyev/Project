@@ -1,0 +1,141 @@
+.Weitlist{
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 20px;
+    row-gap: 25px;
+    position: relative;
+}
+
+.customerFilte{
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+}
+
+.customerFilter{
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 15px;
+    position: relative;
+}
+
+.saralash{
+    width: 300px;
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #ececec;
+    border-radius: 10px;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+.saralash h3{
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.saralash svg{
+    width: 25px;
+    height: 25px;
+}
+
+.filter{
+    height: 200px;
+    overflow-y: scroll;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 3px;
+    background: #fff;
+    box-shadow: 0px 0px 10px #ccc;
+    border-radius: 10px;
+    padding: 15px 5px;
+    transition: 0.3s;
+}
+
+.filter::-webkit-scrollbar-thumb{
+    background: transparent;
+    border-radius: 10px;
+    transition: 0.2s;
+}
+
+.filter::-webkit-scrollbar{
+    width: 5px;
+}
+
+.filter:hover::-webkit-scrollbar-thumb{
+    background: #ccc;
+}
+
+.filter h3{
+    width: 100%;
+    padding: 3px 10px;
+    transition: 0.3s;
+    cursor: pointer;
+
+    &:hover{
+        background: #ececec;
+    }
+}
+
+.customerPlus{
+    width: 300px;
+    height: 60px;
+    background: #ececec;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 15px;
+    cursor: pointer;
+    gap: 5px;
+}
+
+.customerPlus h3{
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.customerPlus svg{
+    width: 20px;
+    height: 20px;
+}
+
+.customersCards{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.customers{
+    width: 300px;
+    height: 75px;
+    background: #ececec;
+    padding: 10px 15px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-direction: column;
+}
+
+.customers .id{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}

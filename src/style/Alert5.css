@@ -1,0 +1,73 @@
+.Alert5{
+    width: 50%;
+    height: auto;
+    padding: 20px 40px 40px;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0px 0px 15px #a7a7a7;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 30px;
+}
+
+.title h3{
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.cusInfo{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.cusInfo h3{
+    font-size: 19px;
+    font-weight: 500;
+}
+
+.reyload{
+    padding: 7px 15px;
+    background: #078625;
+    color: #fff;
+    border-radius: 20px;
+    align-self: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.reyload svg{
+    width: 25px;
+    height: 25px;
+}
+
+.weitButtons{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+}
+
+.weitButtons button{
+    padding: 10px 20px;
+    border-radius: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    color: #fff;
+    font-size: 18px;
+}
+
+.weitButtons button svg{
+    width: 25px;
+    height: 25px;
+}

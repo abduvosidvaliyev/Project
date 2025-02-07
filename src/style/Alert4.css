@@ -1,0 +1,63 @@
+.alert4 {
+    width: 35%;
+    height: auto;
+    background: #fff;
+    box-shadow: 0px 0px 15px #777;
+    border-radius: 15px;
+    padding: 15px 50px 50px 50px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 25px;
+    flex-direction: column;
+    position: relative;
+}
+
+.editInputs{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 25px;
+}
+
+.editInputs input{
+    width: 100%;
+    height: 40px;
+    background: #d9d9d9;
+    outline: none;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 17px;
+}
+
+.editInputs button{
+    width: 100%;
+    height: 40px;
+    background: #d9d9d9;
+    color: #000;
+    text-align: start;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 17px;
+}
+
+.editInputs select{
+    width: 100%;
+    height: 40px;
+    background: #d9d9d9;
+    border-radius: 10px;
+    padding: 7px;
+    outline: none;
+    cursor: pointer;
+    color: #888e98;
+}
+
+.editInputs select:focus{
+    color: #000;
+} 
+
+.docname{ 
+    color: #000 !important;
+}

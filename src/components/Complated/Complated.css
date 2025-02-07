@@ -1,0 +1,56 @@
+.Complated {
+    width: 300px;
+    height: auto;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 15px;
+    row-gap: 25px;
+}
+
+.complated {
+    width: 285px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 3%;
+    border-radius: 10px;
+    background: #ECECEC;
+}
+
+.complated h3 {
+    font-size: 18px;
+    font-weight: 500;
+    color: #101010;
+    letter-spacing: 1px;
+}
+
+.complatedUser {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.complatedChild {
+    width: 285px;
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 10px 15px;
+    border-radius: 10px;
+    background: #ECECEC;
+}
+
+.filterComplated{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    
+}

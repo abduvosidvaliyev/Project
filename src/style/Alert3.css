@@ -1,0 +1,58 @@
+.userDelete {
+    width: 56%;
+    height: auto;
+    padding: 15px 20px 30px 20px;
+    background: #fff;
+    box-shadow: 0px 0px 10px #ccc;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    position: absolute;
+    gap: 30px;
+    align-self: center;
+    top: 170px;
+    transition: 0.4s;
+}
+
+.userDelete h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #ff0004;
+}
+
+.deleteButton {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.deleteButton button:nth-child(1) {
+    padding: 7px 30px;
+    border-radius: 30px;
+    border: 3px solid #FF1216;
+    transition: 0.3s;
+    font-size: 17px;
+    background: #FF1216;
+    color: #fff;
+
+    &:hover {
+        background: transparent;
+        color: #000
+    }
+}
+
+.deleteButton button:nth-child(2) {
+    padding: 7px 30px;
+    border-radius: 30px;
+    border: 3px solid #FF1216;
+    transition: 0.3s;
+    font-size: 17px;
+
+    &:hover {
+        background: #FF1216;
+        color: #fff;
+    }
+}
