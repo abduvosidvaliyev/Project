@@ -97,7 +97,7 @@ const Weitlist = () => {
     const [customerInfo, setCustomerInfo] = useState({});
     const [alert5Show, setAlert5Show] = useState(false);
 
-    const alertShow = (item, e) => {
+    const alertShow = (item) => {
         setAlert5Show(true);
         setCustomerInfo(item);
     };
@@ -123,7 +123,7 @@ const Weitlist = () => {
             <Navbar />
             <div className="weitlistContainer">
                 <div className="weitNavbar sticky top-0 z-10">
-                    <h3>Bugungi kunlik barcha mijozlar</h3>
+                    <h3>Bugungi kunlik barcha mijozlar: {customers.length} ta </h3>
                     <Profile />
                 </div>
                 <div className="weitCustomers">
@@ -157,7 +157,7 @@ const Weitlist = () => {
                                     <option value="tugatildi">Tugatilgan</option>
                                 </select>
                             </div>
-                            <LuFilterX onClick={() => setFilters({ id: "", name: "", doctor: "", status: "", sort: "" })} />
+                            <LuFilterX color="#fff" onClick={() => setFilters({ id: "", name: "", doctor: "", status: "", sort: "" })} />
                         </div>
                         <table className="usersFilter">
                             <thead>

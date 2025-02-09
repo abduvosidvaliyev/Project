@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from "react"
 import Weitlist from "../../components/Weitlist/Weitlist"
 import Complated from "../../components/Complated/Complated"
-import WeitlistArray from "../../components/Array/WeitlistArray"
 
 import "./Home.css"
 
@@ -21,6 +20,7 @@ const Home = () => {
 
     const [FirebaseDoctor, setFirebaseDoctor] = useState([])
     const [FirebaseAdmin, setFirebaseAdmin] = useState([])
+    const [FirebaseCustomer, setFirebaseCustomers] = useState([]);
 
     const [active, setActive] = useState("home");
     const [WeitlistShowHid, setWeitlistShowHid] = useState(true)
@@ -77,13 +77,11 @@ const Home = () => {
         fetchUsers();
     }, []);
 
-    const [FirebaseCustomer, setCustomers] = useState([]);
-
     useEffect(() => {
         const fetchUsers = async () => {
             try {
                 const usersData = await getCustomers();
-                setCustomers(usersData);
+                setFirebaseCustomers(usersData);
             } catch (error) {
                 console.error("Failed to fetch users:", error);
             }

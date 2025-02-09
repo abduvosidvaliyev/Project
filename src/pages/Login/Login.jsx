@@ -1,61 +1,11 @@
 import "./Login.css"
-import { Link, useNavigate } from "react-router-dom"
 import background from "./Images/background.png"
-import { useContext, useEffect, useState } from "react"
-import { LuDelete } from "react-icons/lu"
+import { useEffect, useState } from "react"
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa"
-import Array from "../../Array"
-
-import UserContext from "../../Context/Context"
-import { collection, doc, getDocs, updateDoc } from "firebase/firestore"
-import { db } from "../../firebase"
-
-import cat from "../../Images/cat.png"
-import corgi from "../../Images/corgi.png"
-import dragon from "../../Images/dragon.png"
-import elephand from "../../Images/elephand.png"
-import fox from "../../Images/fox.png"
-import pannda from "../../Images/panda.png"
-import penguin from "../../Images/penguin.png"
-import robbit from "../../Images/robbit.png"
-import ball from "../../Images/ball.png"
-import bike from "../../Images/bike.png"
-import cheese from "../../Images/cheese.png"
-import rome from "../../Images/rome.png"
-import sunglasess from "../../Images/sunglasess.png"
-import sushi from "../../Images/sushi.png"
-import avacado from "../../Images/avacado.png"
-import watermaleon from "../../Images/watermaleon.png"
-import pizza from "../../Images/pizza.png"
-import disc from "../../Images/disc.png"
-
-import { FaPlus } from "react-icons/fa"
-import firebase from "firebase/compat/app"
+import { getAdmin } from "../../service/fireStoreAdminService";
+import { getUsers } from "../../service/fireStoreDoctorService";
 
 const Login = () => {
-    const imagesArray = [
-        cat,
-        corgi,
-        dragon,
-        elephand,
-        fox,
-        pannda,
-        penguin,
-        robbit,
-        ball,
-        bike,
-        cheese,
-        rome,
-        sunglasess,
-        sushi,
-        avacado,
-        watermaleon,
-        pizza,
-        disc
-    ]
-
-    const contextValue = useContext(UserContext)
-
     const [inputValue, setInputValue] = useState("")
     const [nameValue, setNameValue] = useState("")
     const [eye, setEye] = useState(false)
@@ -63,77 +13,72 @@ const Login = () => {
     const [Type, setType] = useState("password")
     const [Show, setShow] = useState("none")
     const [Hid, setHid] = useState("none")
-    const navigate = useNavigate()
 
     const [FirebaseAdmin, setFirebaseAdmin] = useState([])
     const [FirebaseDoctor, setFirebaseDoctor] = useState([])
 
     const Unlock = () => {
-        const doctor = FirebaseDoctor.find((item) => item.code === inputValue)
-        const admin = FirebaseAdmin.find((item) => item.code === inputValue)
+        const doctor = FirebaseDoctor.find((item) => item.code === inputValue && item.name.split(" ")[0] === nameValue)
+        const admin = FirebaseAdmin.find((item) => item.code === inputValue && item.name.split(" ")[0] === nameValue)
 
         if (admin || doctor) {
-            localStorage.setItem("PINcode", JSON.stringify(inputValue))
-            window.location.reload()
-        }
+            const user = admin || doctor;
+            const firstName = user.name.split(" ")[0];
 
+            localStorage.setItem("PINcode", JSON.stringify(inputValue));
+            localStorage.setItem("UserName", firstName);
+            window.location.reload();
+        }
         else {
-            alert("Noto'g'ri PIN!")
-            setInputValue("")
-            setNameValue("")
+            alert("Noto'g'ri PIN yoki Login");
         }
     }
 
     useEffect(() => {
-        const getUsers = async () => {
+        const fetchUser = async () => {
             try {
-                const querySnapshot = await getDocs(collection(db, "admins"));
-                const usersArray = querySnapshot.docs.map((doc) => ({
-                    id: doc.id,
-                    ...doc.data()
-                }));
-                setFirebaseAdmin(usersArray);
+                const userData = await getAdmin()
+                setFirebaseAdmin(userData)
             } catch (error) {
-                console.error("Xatolik yuz berdi:", error);
+                console.error("Failed to fetch admin:", error)
             }
-        };
+        }
 
-        getUsers();
-    }, []);
+        fetchUser()
+    }, [])
 
     useEffect(() => {
-        const getUsers = async () => {
+        const fetchUser = async () => {
             try {
-                const querySnapshot = await getDocs(collection(db, "users"));
-                const usersArray = querySnapshot.docs.map((doc) => ({
-                    id: doc.id,
-                    ...doc.data()
-                }));
-                setFirebaseDoctor(usersArray);
+                const userData = await getUsers()
+                setFirebaseDoctor(userData)
             } catch (error) {
-                console.error("Xatolik yuz berdi:", error);
+                console.error("Failed to fetch admin:", error)
             }
-        };
+        }
 
-        getUsers();
-    }, []);
+        fetchUser()
+    }, [])
 
     const UnlockEnter = (e) => {
         if (e.key === "Enter" || e.key === "NumpadEnter") {
-            const doctor = FirebaseDoctor.find((item) => item.code === inputValue)
-            const user = FirebaseAdmin.find((item) => item.code === inputValue)
+            const doctor = FirebaseDoctor.find((item) => item.code === inputValue && item.name.split(" ")[0] === nameValue)
+            const admin = FirebaseAdmin.find((item) => item.code === inputValue && item.name.split(" ")[0] === nameValue)
+            console.log(admin, doctor)            
 
-            if (user || doctor) {
-                localStorage.setItem("PINcode", JSON.stringify(inputValue))
-                window.location.reload()
+            if (admin || doctor) {
+                const user = admin || doctor;
+                const firstName = user.name.split(" ")[0]; 
+
+                localStorage.setItem("PINcode", JSON.stringify(inputValue));
+                localStorage.setItem("UserName", firstName);
+                window.location.reload();
             }
             else if (inputValue && nameValue === "") {
                 e.preventDefault()
             }
             else {
-                alert("Noto'g'ri PIN!");
-                setInputValue("")
-                setNameValue("")
+                alert("Noto'g'ri PIN yoki Login");
             }
         }
     }

@@ -145,7 +145,7 @@ const Weitlist = ({ width1, addCustomer }) => {
                                 <span>
                                     Id: {item.id}
                                 </span>
-                                <p style={{ color: item.delate === true ? "#078625" : "#FF1216" }}>
+                                <p>
                                     Status
                                 </p>
                             </div>
@@ -161,7 +161,7 @@ const Weitlist = ({ width1, addCustomer }) => {
                                     <span>
                                         Id: {item.id}
                                     </span>
-                                    <p style={{ color: item.delate === true ? "#078625" : "#FF1216" }}>
+                                    <p>
                                         Status
                                     </p>
                                 </div>
