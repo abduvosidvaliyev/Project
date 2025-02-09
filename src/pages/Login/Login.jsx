@@ -71,7 +71,7 @@ const Login = () => {
                 const firstName = user.name.split(" ")[0]; 
 
                 localStorage.setItem("PINcode", JSON.stringify(inputValue));
-                localStorage.setItem("UserName", firstName);
+                localStorage.setItem("UserName", JSON.stringify(firstName));
                 window.location.reload();
             }
             else if (inputValue && nameValue === "") {
@@ -129,6 +129,7 @@ const Login = () => {
                             placeholder="Name:"
                             onChange={(e) => setNameValue(e.target.value)}
                             value={nameValue}
+                            onKeyUp={(e) => UnlockEnter(e)}
                         />
                         <input
                             type={Type}

@@ -13,11 +13,12 @@ const App = () => {
   const [id, setID] = useState(Number)
   const [alert4Show, setAlert4Show] = useState(false)
 
-  const localCode = JSON.parse(localStorage.getItem("PINcode"))
+  const localCode = localStorage.getItem("PINcode")
+  const localName = localStorage.getItem("UserName")
 
   let array = ""
 
-  if (localCode) {
+  if (localCode && localName) {
     array = <HomePage />
   } else {
     array = <Login />
