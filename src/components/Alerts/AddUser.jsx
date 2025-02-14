@@ -5,7 +5,7 @@ import { RiDeleteBin5Fill } from "react-icons/ri"
 import { addUser } from "../../service/fireStoreDoctorService"
 import { useState } from "react"
 
-const AddUser = ({ AddUser, doctor }) => {
+const AddUser = ({ AddUser, Users, doctor }) => {
 
     const [userName, setUserName] = useState("")
     const [userJob, setUserJob] = useState("")
@@ -21,11 +21,12 @@ const AddUser = ({ AddUser, doctor }) => {
         }
 
         try {
-            await addUser({
+            const add = await addUser({
                 id: doctor.length + 1,
                 name: userName,
                 job: userJob,
                 number: phoneNumber,
+                images: "",
                 delate: true,
                 complated: true,
                 code: code,
@@ -37,7 +38,7 @@ const AddUser = ({ AddUser, doctor }) => {
             console.error("Failed to add user:", error)
         }
 
-        addUser(false)
+        AddUser(false)
     }
 
     return (

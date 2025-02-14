@@ -182,8 +182,8 @@ const Users = () => {
                     </div>
                 </div>
             </div>
-            {alertShow ? <Alert1 yonalish="Yo'nalish" son="Login" sarlavha="Hodim" alertShow={setAlertShow} royhat="Qachon ro'yhatdan o'tgan" userInformation={userInformation} /> : ""}
-            {addUser ? <AddUser AddUser={setAddUser} doctor={doctor}/> : ""}
+            {alertShow ? <Alert1 alertShow={setAlertShow} userInformation={userInformation} /> : ""}
+            {addUser ? <AddUser Users={setUsers} AddUser={setAddUser} doctor={doctor}/> : ""}
         </section>
     )
 }

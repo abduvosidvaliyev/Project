@@ -4,9 +4,9 @@ import { CiEdit } from "react-icons/ci"
 import { IoClose } from "react-icons/io5"
 import { MdLibraryAddCheck } from "react-icons/md"
 import { RiDeleteBin5Fill } from "react-icons/ri"
-import UserContext from "../../Context/Context"
 import Alert4 from "./Alert4"
 import { getCustomerIds, updateCustomers } from "../../service/fireStoreCustomerService"
+import UserContext from "../../Context/Context"
 
 const Alert3 = ({ customerInfo }) => {
 
@@ -50,7 +50,7 @@ const Alert3 = ({ customerInfo }) => {
         }
         contextId.setAlert4Show(false);
     };
-    
+
     const complatedCustomer = async () => {
         try {
             const customerId = customerInfo.id - 1;
@@ -81,7 +81,7 @@ const Alert3 = ({ customerInfo }) => {
                             <h3>Id: {customerInfo.id}</h3>
                             <h3>Mijoz: {customerInfo.name}</h3>
                             <h3>Doktor: {customerInfo.doctorName}</h3>
-                            <h3>Tel: </h3>
+                            <h3>Tel: {customerInfo.number}</h3>
                             <h3>Qachon ro'yhatdan o'tgan: </h3>
                             <h3>Bundan oldingi mijozlar soni: {customerInfo.id}</h3>
                         </div>
@@ -98,7 +98,7 @@ const Alert3 = ({ customerInfo }) => {
                             <button onClick={complatedCustomer} style={{ background: "#078625" }}>Tugatish <MdLibraryAddCheck /></button>
                         </div>
 
-                        <div className="userDelete" style={{ opacity: deleteOpacity, transform: `scale(${deleteScale})`, pointerEvents: deleteEvent }}>
+                        <div className="userDelete" style={{ opacity: deleteOpacity, transform: `scale(${ deleteScale })`, pointerEvents: deleteEvent }}>
                             <h3>
                                 Rostdanham bu mijozni o'chirmoqchimisiz ?
                             </h3>

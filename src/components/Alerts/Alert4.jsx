@@ -45,21 +45,6 @@ const Alert4 = ({ AlertHid, cusInfo }) => {
         fetchCustomerIds();
     }, []);
 
-    // const chengeCustomer = async () => {
-    //     if (name === "" && number === "" && doctor === "") {
-    //         alert("Iltimos bo'sh joylarni barchasini to'diring")
-    //     }
-    //     else {
-    //         try {
-    //             await updateUser(customerIds[contextId.id], { name: name });
-    //         } catch (error) {
-    //             console.error("Failed to update user:", error);
-    //         }
-    //         contextId.setAlert4Show(false)
-    //         // console.log(name, number, doctor, customerIds[cusInfo.id])            
-    //     }        
-    // }
-
     const chengeCustomer = async () => {
         if (!name || !number || !doctor) {
             alert("Iltimos, barcha maydonlarni to‘ldiring!");

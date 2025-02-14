@@ -10,10 +10,15 @@ import { useEffect, useState } from "react"
 import { HiArrowPath } from "react-icons/hi2"
 import Alert6 from "./Alert6"
 
-const Alert5 = ({ cusInfo, alertShow }) => {
-
+const Alert5 = ({ cusInfo, customer, alertShow }) => {
     const [customerIds, setCustomerIds] = useState([]);
 
+    const [cusArray, setCusArray] = useState([]);
+
+    useEffect(() => {
+        setCusArray(customer.filter(item => item.complated === true && item.delate === true));
+    }, [customer]); 
+        
     useEffect(() => {
         const fetchCustomerIds = async () => {
             try {
@@ -67,6 +72,13 @@ const Alert5 = ({ cusInfo, alertShow }) => {
         }
     }
 
+    const formatDate = (timestamp) => {
+        if (timestamp && timestamp.seconds) {
+            return new Date(timestamp.seconds * 1000).toLocaleDateString();
+        }
+        return "Noma'lum";
+    };
+
     const [alert2Show, setalert2Show] = useState(false)
 
     return (
@@ -86,9 +98,9 @@ const Alert5 = ({ cusInfo, alertShow }) => {
                     <h3>Id: {cusInfo.id}</h3>
                     <h3>Mijoz: {cusInfo.name}</h3>
                     <h3>Doktor: {cusInfo.doctorName}</h3>
-                    <h3>Tel: </h3>
-                    <h3>Qachon ro'yhatdan o'tgan: </h3>
-                    <h3>Bundan oldingi mijozlar soni: </h3>
+                    <h3>Tel: {cusInfo.number}</h3>
+                    <h3>Qachon ro'yhatdan o'tgan: {formatDate(cusInfo.createdAt)}</h3> 
+                    <h3>Bundan oldingi mijozlar soni: {cusArray.filter(item => item.id < cusInfo.id).length}</h3>
                 </div>
                 {
                     !cusInfo.delate ?
@@ -127,7 +139,7 @@ const Alert5 = ({ cusInfo, alertShow }) => {
                                     Yana bir bor yozish <HiArrowPath />
                                 </button> : ""
                 }
-            </div> : <Alert6 alertShow={alertShow} alert2Show={setalert2Show}/>}
+            </div> : <Alert6 alertShow={alertShow} alert2Show={setalert2Show} />}
         </>
     )
 }

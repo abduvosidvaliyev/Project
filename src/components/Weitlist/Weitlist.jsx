@@ -114,7 +114,7 @@ const Weitlist = ({ width1, addCustomer }) => {
                     </h3>
                     <GrFilter />
                 </div>
-                
+
                 {FindAdmin ?
                     <div style={{ opacity: opasity, pointerEvents: Pointer, top: top }} className="filter">
                         <h3 onClick={() => xechnma("Hammasi")}>
@@ -128,7 +128,7 @@ const Weitlist = ({ width1, addCustomer }) => {
                             )
                         }
                     </div>
-                : ""}
+                    : ""}
 
                 <div className="customerPlus" onClick={() => addCustomer(true)}>
                     <h3>

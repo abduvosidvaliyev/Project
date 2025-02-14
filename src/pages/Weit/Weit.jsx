@@ -213,7 +213,7 @@ const Weitlist = () => {
 
             {alert5Show && (
                 FindAdmin ? <div className="alertContainer">
-                    <Alert5 cusInfo={customerInfo} alertShow={setAlert5Show} />
+                    <Alert5 cusInfo={customerInfo} customer={customers} alertShow={setAlert5Show} />
                 </div> : ""
             )}
 

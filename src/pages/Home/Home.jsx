@@ -142,15 +142,15 @@ const Home = () => {
                     >
                         Tugatilganlar
                     </button>
-                </div>
+                </div >
                 <Profile />
-            </nav>
+            </nav >
             <header className="weitlist">
                 {WeitlistShowHid ? <Weitlist addCustomer={setAddCustomerAlert} alertShow={contextId.setAlert4Show} width1={WeitlistWidth} /> : ""}
                 {CompletedShowHid ? <Complated firebaseDoctor={FirebaseDoctor} firebaseAdmin={FirebaseAdmin} pinCode={PINcode} width2={ComplatedWidth} /> : ""}
             </header>
             {contextId.alert4Show ? <Alert3 alertShow={setAlertShow} customerInfo={customerInfo} /> : ""}
-            {addCustomerAlert ? <AddCustomer addCustomer={setAddCustomerAlert} firebaseUser={FirebaseDoctor} firebaseCustomer={FirebaseCustomer}/> : ""}
+            {addCustomerAlert ? <AddCustomer addCustomer={setAddCustomerAlert} firebaseUser={FirebaseDoctor} firebaseCustomer={FirebaseCustomer} /> : ""}
         </section >
     )
 }

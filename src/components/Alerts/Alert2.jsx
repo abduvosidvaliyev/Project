@@ -5,6 +5,7 @@ import { RiDeleteBin5Fill } from "react-icons/ri"
 import "../../style/Alert2.css"
 
 const Alert2 = ({ titleText, buttonText, alertShow, alertHid }) => {
+    
     return (
         <div className="alert2">
             <div className="title">
