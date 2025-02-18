@@ -5,7 +5,7 @@ import { FaSearch } from "react-icons/fa"
 import { HiPlus } from "react-icons/hi"
 import { BsFillGrid3X3GapFill, BsGridFill } from "react-icons/bs"
 import { TfiLayoutGrid4Alt } from "react-icons/tfi"
-import Alert1 from "../../components/Alerts/Alert1"
+import Alert1 from "../../components/Alerts/DoctorInfo"
 import { getUsers } from "../../service/fireStoreDoctorService"
 import Profile from "../../components/Profile"
 import AddUser from "../../components/Alerts/AddUser"
@@ -164,10 +164,7 @@ const Users = () => {
                             sortedDoctors.filter(item => item.delate && item.name.toLowerCase().includes(searchTerm))
                                 .map(item =>
                                     <div className="doctorCard cursor-pointer" onClick={() => alertInformation(item.id)} style={{ width: CardWidth, justifyContent: CardContent, }}>
-                                        {
-                                            item.images === "" ? <h3 className="textImg">{item.name[0]}</h3>
-                                                : <img className="userImg" src={item.images} alt="" />
-                                        }
+                                        <h3 className="textImg">{item.name[0]}</h3>
                                         <div className="info" style={{ display: InfoDisplay }}>
                                             <h2>
                                                 {item.name}
@@ -182,8 +179,8 @@ const Users = () => {
                     </div>
                 </div>
             </div>
-            {alertShow ? <Alert1 alertShow={setAlertShow} userInformation={userInformation} /> : ""}
-            {addUser ? <AddUser Users={setUsers} AddUser={setAddUser} doctor={doctor}/> : ""}
+            {alertShow ? <Alert1 doctor={doctor} alertShow={setAlertShow} userInformation={userInformation} /> : ""}
+            {addUser ? <AddUser Users={setUsers} AddUser={setAddUser} doctor={doctor} /> : ""}
         </section>
     )
 }

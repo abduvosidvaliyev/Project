@@ -15,6 +15,8 @@ const Weitlist = ({ width1, addCustomer }) => {
     const [FirebaseAdmin, setFirebaseAdmin] = useState([])
     const [FirebaseCustomer, setFirebaseCustomers] = useState([]);
 
+    const { id, setId, alert4Show, setAlert4Show } = useContext(UserContext);
+
     const FindAdmin = FirebaseAdmin.find(item => item.code === PINcode)
     const FindUser = FirebaseUsers.find(item => item.code === PINcode)
 
@@ -101,8 +103,8 @@ const Weitlist = ({ width1, addCustomer }) => {
     };
 
     const FilterId = (id) => {
-        contextId.setID(id)
-        contextId.setAlert4Show(true)
+        setId(id)
+        setAlert4Show(true)
     }
 
     return (

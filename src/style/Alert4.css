@@ -61,3 +61,16 @@
 .docname{ 
     color: #000 !important;
 }
+
+.selectDoctor{
+    width: 100%;
+    padding: 10px 7px;
+    background: #d9d9d9;
+    border-radius: 8px;
+    color: #888e98;
+    outline: none;
+}
+
+.selectDoctor option{
+    color: #000;
+}

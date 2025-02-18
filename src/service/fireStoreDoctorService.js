@@ -27,7 +27,7 @@ export const getUsers = async () => {
 };
 
 
-
+// faqat Id si boyicha oqish
 export const getUsersId = async () => {
     try {
         const q = query(collection(db, "users"), orderBy("id", "asc"));

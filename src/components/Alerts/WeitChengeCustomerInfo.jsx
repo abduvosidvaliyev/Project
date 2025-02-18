@@ -1,13 +1,13 @@
 import "../../style/Alert4.css"
-import { AiOutlineCloseCircle } from "react-icons/ai"
 import { CiEdit } from "react-icons/ci"
-
+import { IoClose } from "react-icons/io5"
+import { RiDeleteBin5Fill } from "react-icons/ri"
+import { getUsers } from "../../service/fireStoreDoctorService"
 import { useContext, useEffect, useState } from "react"
 import UserContext from "../../Context/Context"
-import { getUsers, updateUser } from "../../service/fireStoreDoctorService"
-import { getCustomerIds } from "../../service/fireStoreCustomerService"
+import { getCustomerIds, updateCustomers } from "../../service/fireStoreCustomerService"
 
-const Alert4 = ({ AlertHid, cusInfo }) => {
+const Alert6 = ({ alertShow, alert2Show, cusInfo }) => {
 
     const contextId = useContext(UserContext)
 
@@ -32,6 +32,7 @@ const Alert4 = ({ AlertHid, cusInfo }) => {
 
     const [customerIds, setCustomerIds] = useState([]);
 
+
     useEffect(() => {
         const fetchCustomerIds = async () => {
             try {
@@ -50,53 +51,61 @@ const Alert4 = ({ AlertHid, cusInfo }) => {
             alert("Iltimos, barcha maydonlarni to‘ldiring!");
             return;
         }
-    
+
         try {
-            await updateUser(cusInfo.id, { name, number, doctor });
-            alert("Ma'lumotlar yangilandi!");
+            await updateCustomers(customerIds[cusInfo.id - 1], {
+                name: name,
+                doctorName: doctor
+            });
         } catch (error) {
             console.error("Failed to update user:", error);
         }
-        contextId.setAlert4Show(false);
+        alert2Show(false)
     };
-    
 
     return (
-        <div className="alert4">
+        <div className="alert2">
             <div className="title">
                 <h3>
-                    Ma'lumotlarni o'zgartirish
+                    Ma'lumotni o'zgartirish
                 </h3>
+                <IoClose onClick={() => alertShow(false)} />
             </div>
-            <div className="editInputs">
-                <input type="text" onChange={(e) => setName(e.target.value)} placeholder="Mijoz ism familyasi" />
+            <div className="inputs">
+                <input type="text" onChange={(e) => setName(e.target.value)} placeholder="Mijoz ism familiyasi:" />
                 <input type="text" onChange={(e) => setNumber(e.target.value)} placeholder="Telifon raqami: " />
-                <select name="" onChange={(e) => setDoctor(e.target.value)} className="selectDoctor">
-                    <option hidden={true} value="">Doktor tanlash</option>
+                <select name="" className="selectDoctor" onChange={(e) => setDoctor(e.target.value)}>
+                    <option value="" hidden={true}>Doktor tanlash</option>
 
                     {
                         users.map(item =>
-                            <option value={item.id} className="docname">{item.name}</option>
+                            <option value={item.name.split(" ")[0]} className="docname">{item.name}</option>
                         )
                     }
                 </select>
-                <button>Kechiktirish</button>
             </div>
             <div className="buttons">
                 <button
-                    onClick={() => AlertHid(true)}
-                    style={{ background: "#ff1216" }}>Bekor qilish
-                    <AiOutlineCloseCircle style={{ width: "25px", height: "25px" }} />
+                    onClick={() => alert2Show(false)}
+                    style={{ background: "#ff1216" }}
+                >
+                    Bekor qilish
+                    <RiDeleteBin5Fill
+                        style={{ width: "25px" }}
+                    />
                 </button>
                 <button
                     onClick={chengeCustomer}
                     style={{ background: "#5f53fe" }}
                 >
-                    O'zgartirildi <CiEdit />
+                    O'zgartirish
+                    <CiEdit
+                        style={{ width: "25px" }}
+                    />
                 </button>
             </div>
         </div>
     )
 }
 
-export default Alert4
+export default Alert6

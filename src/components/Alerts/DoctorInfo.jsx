@@ -5,25 +5,39 @@ import { RiDeleteBin5Fill } from "react-icons/ri";
 
 import "../../style/Alert1.css";
 
-import Alert2 from "./Alert2";
-import { useState } from "react";
-import { doc, updateDoc } from "firebase/firestore";
-import { db } from "../../firebase";
+import Alert2 from "./ChangeDoctorInfo";
+import { useEffect, useState } from "react";
+import { deleteUser, getUsersId } from "../../service/fireStoreDoctorService";
 
-const Alert1 = ({ alertShow, userInformation }) => {
+const Alert1 = ({ alertShow, userInformation, doctor }) => {
+
+    const [doctorIds, setDoctorIds] = useState([]);
+
+    useEffect(() => {
+        const fetchUSerId = async () => {
+            try {
+                const ids = await getUsersId();
+                setDoctorIds(ids);
+            } catch (error) {
+                console.error("Failed to fetch customer IDs:", error);
+            }
+        };
+
+        fetchUSerId();
+    }, []);
+
+
     const [alert1Hid, setAlert1Hid] = useState(true);
 
     const deleteDoctor = async (doctorId) => {
         try {
-            const doctorRef = doc(db, "users", doctorId);
-            await updateDoc(doctorRef, { delate: false });
+            await deleteUser(doctorIds[doctorId - 1]); 
             alertShow(false);
         } catch (error) {
             console.error("Xatolik yuz berdi:", error);
         }
     };
 
-    // Firestore sanasini to'g'ri formatga o'tkazish (faqat sana, soatsiz)
     const formatDate = (timestamp) => {
         if (timestamp && timestamp.seconds) {
             return new Date(timestamp.seconds * 1000).toLocaleDateString();
@@ -47,6 +61,7 @@ const Alert1 = ({ alertShow, userInformation }) => {
                         <h3>Login: {userInformation.name ? userInformation.name.split(" ")[0] : "Noma'lum"}</h3>
                         <h3>Parol: {userInformation.code || "Noma'lum"}</h3>
                         <h3>Qachon ro'yhatdan o'tgan: {formatDate(userInformation.createdAt)}</h3>
+                        <h3>Tug'ilgan yili: {userInformation.year}</h3>
                     </div>
                     <div className="buttons">
                         <button onClick={() => deleteDoctor(userInformation.id)} style={{ background: "#ff1216" }}>
@@ -63,7 +78,7 @@ const Alert1 = ({ alertShow, userInformation }) => {
                     </div>
                 </div>
             ) : (
-                <Alert2 alertShow={alertShow} alertHid={setAlert1Hid} titleText="Malumotlarni o'zgartirish" buttonText="O'zgartirildi" />
+                <Alert2 doctor={doctor} alertShow={alertShow} userInfo={userInformation} alertHid={setAlert1Hid} />
             )}
         </div>
     );

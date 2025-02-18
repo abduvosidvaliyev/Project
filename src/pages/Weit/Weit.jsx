@@ -4,7 +4,7 @@ import Navbar from "../Navbar/Navbar";
 import Profile from "../../components/Profile";
 import { getUsers } from "../../service/fireStoreDoctorService";
 import { getCustomers } from "../../service/fireStoreCustomerService";
-import Alert5 from "../../components/Alerts/Alert5";
+import Alert5 from "../../components/Alerts/WeitCustomerInfo";
 import ReactPaginate from "react-paginate";
 import { LuFilterX } from "react-icons/lu";
 import { getAdmin } from "../../service/fireStoreAdminService";
