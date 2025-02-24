@@ -2,8 +2,8 @@ import "./Login.css"
 import background from "./Images/background.png"
 import { useEffect, useState } from "react"
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa"
-import { getAdmin, subscribeToAdmins } from "../../service/fireStoreAdminService";
-import { getUsers } from "../../service/fireStoreDoctorService";
+import { onSnapshot, collection } from "firebase/firestore";
+import { db } from "../../firebase";
 
 const Login = () => {
     const [inputValue, setInputValue] = useState("")
@@ -35,40 +35,30 @@ const Login = () => {
     }
 
     useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const userData = await subscribeToAdmins()
-                setFirebaseAdmin(userData)
-            } catch (error) {
-                console.error("Failed to fetch admin:", error)
-            }
-        }
-
-        fetchUser()
-    }, [])
+        const unsubscribe = onSnapshot(collection(db, "admins"), (snapshot) => {
+            const usersData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            setFirebaseAdmin(usersData);
+        });
+        return () => unsubscribe();
+    }, []);
 
     useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const userData = await getUsers()
-                setFirebaseDoctor(userData)
-            } catch (error) {
-                console.error("Failed to fetch admin:", error)
-            }
-        }
-
-        fetchUser()
-    }, [])
+        const unsubscribe = onSnapshot(collection(db, "users"), (snapshot) => {
+            const usersData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            setFirebaseDoctor(usersData);
+        });
+        return () => unsubscribe();
+    }, []);
 
     const UnlockEnter = (e) => {
         if (e.key === "Enter" || e.key === "NumpadEnter") {
             const doctor = FirebaseDoctor.find((item) => item.code === inputValue && item.name.split(" ")[0] === nameValue)
             const admin = FirebaseAdmin.find((item) => item.code === inputValue && item.name.split(" ")[0] === nameValue)
-            console.log(admin, doctor)            
+            console.log(admin, doctor)
 
             if (admin || doctor) {
                 const user = admin || doctor;
-                const firstName = user.name.split(" ")[0]; 
+                const firstName = user.name.split(" ")[0];
 
                 localStorage.setItem("PINcode", JSON.stringify(inputValue));
                 localStorage.setItem("UserName", JSON.stringify(firstName));
