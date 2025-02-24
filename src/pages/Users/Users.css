@@ -176,3 +176,15 @@
     align-items: center;
     font-size: 25px;
 }
+
+.progressRedBackground{
+    background: red !important;
+}
+
+.progressGreenBackground{
+    background: green !important;
+}
+
+.progressBlueBackground{
+    background: #5f54fe !important;
+}

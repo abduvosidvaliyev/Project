@@ -9,8 +9,12 @@ import Alert1 from "../../components/Alerts/DoctorInfo"
 import { getUsers } from "../../service/fireStoreDoctorService"
 import Profile from "../../components/Profile"
 import AddUser from "../../components/Alerts/AddUser"
-import { getAdmin } from "../../service/fireStoreAdminService"
-import { getCustomers } from "../../service/fireStoreCustomerService"
+import { subscribeToAdmins } from "../../service/fireStoreAdminService"
+import { subscribeToCustomers } from "../../service/fireStoreCustomerService"
+import { toast, ToastContainer } from "react-toastify"
+import { FiPlusCircle } from "react-icons/fi"
+import { LuFilePenLine } from "react-icons/lu"
+import { RiDeleteBin6Line } from "react-icons/ri"
 
 const Users = () => {
     const [doctor, setUsers] = useState([]);
@@ -20,54 +24,32 @@ const Users = () => {
     const PINcode = JSON.parse(localStorage.getItem("PINcode"))
 
     useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const usersData = await getUsers();
-                setUsers(usersData);
-            } catch (error) {
-                console.error("Failed to fetch users:", error);
-            }
-        };
-
-        fetchUsers();
+        const unsubscribe = getUsers(setUsers);
+        return () => unsubscribe();
     }, []);
 
     useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const usersData = await getCustomers();
-                setFirebaseCustomers(usersData);
-            } catch (error) {
-                console.error("Failed to fetch users:", error);
-            }
-        };
-
-        fetchUsers();
+        const unsubscribe = subscribeToCustomers(setFirebaseCustomers);
+        return () => unsubscribe();
     }, []);
 
     useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const usersData = await getAdmin();
-                setFirebaseAdmin(usersData);
-            } catch (error) {
-                console.error("Failed to fetch users:", error);
-            }
-        };
-
-        fetchUsers();
+        const unsubscribe = subscribeToAdmins(setFirebaseAdmin);
+        return () => unsubscribe();
     }, []);
 
     const [CardWidth, setCardWidth] = useState("32%")
     const [CardContent, setCardContent] = useState("flex-start")
     const [InfoDisplay, setInfoDisplay] = useState("block")
     const [WeitlistGap, setWeitlistGap] = useState("20px")
+    const [CardDirection, setCardDirection] = useState("row")
 
     const uchtalik = () => {
         setCardWidth("32%")
         setCardContent("flex-start")
         setInfoDisplay("block")
         setWeitlistGap("20px")
+        setCardDirection("row")
     }
 
     const torttalik = () => {
@@ -75,6 +57,7 @@ const Users = () => {
         setCardContent("flex-start")
         setWeitlistGap("15px")
         setInfoDisplay("block")
+        setCardDirection("row")
     }
 
     const beshtalik = () => {
@@ -82,6 +65,7 @@ const Users = () => {
         setCardContent("center")
         setInfoDisplay("flex")
         setWeitlistGap("20px")
+        setCardDirection("column")
     }
 
     const [sortedDoctors, setSortedDoctors] = useState([]);
@@ -108,13 +92,85 @@ const Users = () => {
     const [alertShow, setAlertShow] = useState(false)
     const [userInformation, setUserInformation] = useState([])
 
-    const alertInformation = (id) => {
+    const alertInformation = (name) => {
         setAlertShow(true)
-        const information = doctor.find(item => item.id === id)
+        let information = doctor.find(item => item.name === name)
         setUserInformation(information)
     }
 
     const [addUser, setAddUser] = useState(false)
+
+    const delateNotify = () => {
+        toast.success(
+            <div className="flex items-center justify-between w-full">
+                <RiDeleteBin6Line size={25} color="#ff0000" />
+                <span className="text-xl" style={{ color: "#ff0000" }}>O‘chirildi!</span>
+            </div>,
+            {
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                closeButton: false,
+                icon: false,
+                position: "bottom-right",
+                progressClassName: "progressRedBackground"
+            }
+        );
+    };
+
+    const addNotify = () => {
+        toast.success(
+            <div className="flex items-center justify-between w-full">
+                <FiPlusCircle size={25} color="#078625" />
+                <span className="text-xl" style={{ color: "#078625" }}>Qo‘shildi!</span>
+            </div>,
+            {
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                closeButton: false,
+                icon: false,
+                position: "bottom-right",
+                progressClassName: "progressGreenBackground"
+            }
+        );
+    };
+
+    const chengeNotify = () => {
+        toast.success(
+            <div className="flex items-center justify-between w-full">
+                <LuFilePenLine size={25} color="#5f54fe" />
+                <span className="text-xl" style={{ color: "#5f54fe" }}>O‘zgartirildi!</span>
+            </div>,
+            {
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                closeButton: false,
+                icon: false,
+                position: "bottom-right",
+                progressClassName: "progressBlueBackground"
+            }
+        );
+    };
+
+    const completedNotify = () => {
+        toast.success(
+            <div className="flex items-center justify-between w-full">
+                <FiPlusCircle size={25} color="#078625" />
+                <span className="text-xl" style={{ color: "#078625" }}>Tugatildi!</span>
+            </div>,
+            {
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                closeButton: false,
+                icon: false,
+                position: "bottom-right",
+                progressClassName: "progressGreenBackground"
+            }
+        );
+    };
 
     return (
         <section className="usersPage">
@@ -163,7 +219,11 @@ const Users = () => {
                         {
                             sortedDoctors.filter(item => item.delate && item.name.toLowerCase().includes(searchTerm))
                                 .map(item =>
-                                    <div className="doctorCard cursor-pointer" onClick={() => alertInformation(item.id)} style={{ width: CardWidth, justifyContent: CardContent, }}>
+                                    <div
+                                        className="doctorCard cursor-pointer"
+                                        onClick={() => alertInformation(item.name)}
+                                        style={{ width: CardWidth, justifyContent: CardContent, flexDirection: CardDirection }}
+                                    >
                                         <h3 className="textImg">{item.name[0]}</h3>
                                         <div className="info" style={{ display: InfoDisplay }}>
                                             <h2>
@@ -179,8 +239,26 @@ const Users = () => {
                     </div>
                 </div>
             </div>
-            {alertShow ? <Alert1 doctor={doctor} alertShow={setAlertShow} userInformation={userInformation} /> : ""}
-            {addUser ? <AddUser Users={setUsers} AddUser={setAddUser} doctor={doctor} /> : ""}
+            <ToastContainer />
+            {alertShow ?
+                <Alert1
+                    doctor={doctor}
+                    alertShow={setAlertShow}
+                    userInformation={userInformation}
+                    DelateNotify={delateNotify}
+                    ChengeNotify={chengeNotify}
+                />
+                : ""
+            }
+            {addUser ?
+                <AddUser
+                    Users={setUsers}
+                    AddUser={setAddUser}
+                    doctor={doctor}
+                    AddNotify={addNotify}
+                />
+                : ""
+            }
         </section>
     )
 }

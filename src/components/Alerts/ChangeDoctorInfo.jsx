@@ -1,12 +1,14 @@
+import "../../style/Alert2.css"
+
 import { HiPlus } from "react-icons/hi"
 import { IoClose } from "react-icons/io5"
 import { RiDeleteBin5Fill } from "react-icons/ri"
 
-import "../../style/Alert2.css"
 import { useEffect, useState } from "react"
 import { getUsersId, updateUser } from "../../service/fireStoreDoctorService"
+import { getCustomers, getCustomersByDoctorId, updateCustomers } from "../../service/fireStoreCustomerService"
 
-const Alert2 = ({ alertShow, alertHid, userInfo, doctor }) => {
+const Alert2 = ({ alertShow, chengeNotify, alertHid, userInfo }) => {
 
     const [Name, setName] = useState("")
     const [Number, setNumber] = useState("")
@@ -16,24 +18,28 @@ const Alert2 = ({ alertShow, alertHid, userInfo, doctor }) => {
     const [Data, setData] = useState("")
 
     const [usersId, setUsersId] = useState([]);
+    const [customer, setCustomers] = useState([]);
 
     useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const usersData = await getUsersId();
-                setUsersId(usersData);
-            } catch (error) {
-                console.error("Failed to fetch users:", error);
-            }
-        };
+        const unsubscribeUsers = getUsersId((usersData) => {
+            setUsersId(usersData);
+        });
 
-        fetchUsers();
+        const unsubscribeCustomers = getCustomersByDoctorId(userInfo.name, (customers) => {
+            setCustomers(customers);
+        });
+
+        return () => {
+            unsubscribeUsers();
+            unsubscribeCustomers();
+        };
     }, []);
 
-    const UpdateUser = async () => {
+    const updateDoctorAndCustomers = async () => {
         try {
-            await updateUser(usersId[userInfo.id - 1], {
-                id: doctor.length,
+            const doctorId = usersId[userInfo.id - 1];
+
+            await updateUser(doctorId, {
                 name: Name,
                 job: Job,
                 number: Number,
@@ -41,24 +47,31 @@ const Alert2 = ({ alertShow, alertHid, userInfo, doctor }) => {
                 money: Money,
                 year: Data
             });
-        } catch (error) {
-            console.error("Failed to update user:", error);
-        }
 
-        alertShow(false)
+            const updatePromises = customer.map(customer =>
+                updateCustomers(customer.customerId, { doctorName: Name }),
+            );
+
+            await Promise.all(updatePromises);
+
+            alertShow(false);
+            chengeNotify()
+        } catch (error) {
+            console.error("Failed to update doctor and related customers:", error);
+        }
     };
 
     return (
         <div className="alert2">
             <div className="title">
                 <h3>
-                    Malumotlarni o'zgartirish
+                    Ma'lumotlarni o'zgartirish
                 </h3>
                 <IoClose onClick={() => alertShow(false)} />
             </div>
             <div className="inputs">
                 <input type="text" onChange={(e) => setName(e.target.value)} placeholder="Hodim ism familiyasi:" />
-                <input type="text" onChange={(e) => setNumber(e.target.value)} placeholder="Telifon raqami: " />
+                <input type="text" onChange={(e) => setNumber(e.target.value)} placeholder="Telefon raqami: " />
                 <input type="text" onChange={(e) => setJob(e.target.value)} placeholder="Yo'nalish" />
                 <input type="text" onChange={(e) => setCode(e.target.value)} placeholder="Parol" />
                 <input type="text" onChange={(e) => setMoney(e.target.value)} placeholder="Maosh" />
@@ -71,10 +84,10 @@ const Alert2 = ({ alertShow, alertHid, userInfo, doctor }) => {
                 >
                     Bekor qilish <RiDeleteBin5Fill style={{ width: "25px" }} />
                 </button>
-                <button onClick={UpdateUser} style={{ background: "#078625" }}>O'zgartirildi <HiPlus style={{ width: "25px" }} /></button>
+                <button onClick={updateDoctorAndCustomers} style={{ background: "#078625" }}>O'zgartirildi <HiPlus style={{ width: "25px" }} /></button>
             </div>
         </div>
     )
 }
 
-export default Alert2
+export default Alert2;

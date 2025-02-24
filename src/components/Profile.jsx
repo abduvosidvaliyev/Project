@@ -2,7 +2,7 @@ import "../style/Profile.css"
 import { useEffect, useState } from "react"
 import { HiArrowLeftStartOnRectangle } from "react-icons/hi2"
 import { IoCloseSharp } from "react-icons/io5"
-import { getAdmin, getAdminId, updateAdmin } from "../service/fireStoreAdminService"
+import { getAdmin, getAdminId, subscribeToAdminIds, subscribeToAdmins, updateAdmin } from "../service/fireStoreAdminService"
 import { getUsers, getUsersId, updateUser } from "../service/fireStoreDoctorService"
 
 import { useNavigate } from "react-router-dom"
@@ -13,6 +13,10 @@ const Profile = () => {
 
     const [FirebaseDoctor, setFirebaseDoctor] = useState([]);
     const [FirebaseAdmin, setFirebaseAdmin] = useState([]);
+    const [adminsId, setAdminId] = useState([]);
+    const [usersId, setUsersId] = useState([]);
+
+
     const navigate = useNavigate();
     const [ProfileSh, setProfileSH] = useState(true)
 
@@ -20,60 +24,26 @@ const Profile = () => {
     const user = FirebaseAdmin.find(item => item.code === PINcode);
 
     useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const usersData = await getUsers();
-                setFirebaseDoctor(usersData);
-            } catch (error) {
-                console.error("Failed to fetch users:", error);
-            }
-        };
-
-        fetchUsers();
+        const unsubscribe = getUsers(setFirebaseDoctor);
+        return () => unsubscribe();
     }, []);
 
+    // **Adminlarni olish (real vaqt rejimida)**
     useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const usersData = await getAdmin();
-                setFirebaseAdmin(usersData);
-            } catch (error) {
-                console.error("Failed to fetch users:", error);
-            }
-        };
-
-        fetchUsers();
+        const unsubscribe = subscribeToAdmins(setFirebaseAdmin);
+        return () => unsubscribe();
     }, []);
 
-    const [adminsId, setAdminId] = useState([]);
-
+    // **Adminlarni olish (real vaqt rejimida)**
     useEffect(() => {
-        const fetchCustomerIds = async () => {
-            try {
-                const ids = await getAdminId();
-                setAdminId(ids);
-            } catch (error) {
-                console.error("Failed to fetch customer IDs:", error);
-            }
-        };
-
-        fetchCustomerIds();
+        const unsubscribe = subscribeToAdminIds(setAdminId);
+        return () => unsubscribe();
     }, []);
 
-    const [usersId, setUsersId] = useState([]);
-
-
+    // **Adminlarni olish (real vaqt rejimida)**
     useEffect(() => {
-        const fetchCustomerIds = async () => {
-            try {
-                const ids = await getUsersId();
-                setUsersId(ids);
-            } catch (error) {
-                console.error("Failed to fetch customer IDs:", error);
-            }
-        };
-
-        fetchCustomerIds();
+        const unsubscribe = getUsersId(setUsersId);
+        return () => unsubscribe();
     }, []);
 
     const loginOut = () => {
@@ -100,7 +70,6 @@ const Profile = () => {
                         {(user ? user.name : doctor.name)[0]}
                     </h3>
                     <h3>{user ? user.name : doctor.name}</h3>
-                    <h3>Oliy toifali</h3>
                     <p className="cursor-pointer" onClick={loginOut}>
                         Log out <HiArrowLeftStartOnRectangle />
                     </p>

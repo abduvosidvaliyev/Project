@@ -3,37 +3,38 @@ import { useState } from "react"
 import { IoClose } from "react-icons/io5"
 import { RiDeleteBin5Fill } from "react-icons/ri"
 import { MdLibraryAddCheck } from "react-icons/md"
-import { addCustomers } from "../../service/fireStoreCustomerService"
+import { addCustomer } from "../../service/fireStoreCustomerService"
 
-const AddCustomer = ({ firebaseUser, firebaseCustomer, addCustomer }) => {
+const AddCustomer = ({ firebaseUser, firebaseCustomer, AddNotify, AddCustomers }) => {
 
     const [selectValue, setSelectValue] = useState("")
     const [customerName, setCustomerName] = useState("")
     const [phoneNumber, setPhoneNumber] = useState("")
 
-    const AddCustomer = async () => {
+    const AddCustomer = async () => {        
         if (!selectValue || !customerName || !phoneNumber) {
-            alert("Barcha joylarni to'ldiring")
+            alert("Barcha joylarni to'ldiring");
             return;
         }
 
-        const newId = firebaseCustomer.length + 1;
+        const newCustomer = {
+            id: firebaseCustomer.length + 1,
+            name: customerName,
+            doctorName: selectValue,
+            number: phoneNumber,
+            delate: true,
+            complated: true,
+            createdAt: new Date()
+        };
 
         try {
-            await addCustomers({
-                id: newId,
-                name: customerName,
-                doctorName: selectValue,
-                number: phoneNumber,
-                delate: true,
-                complated: true,
-                createdAt: new Date()
-            });
+            await addCustomer(newCustomer);
         } catch (error) {
             console.error("Failed to add user:", error);
         }
 
-        addCustomer(false)
+        AddCustomers(false);
+        AddNotify()
     };
 
     return (
@@ -44,12 +45,12 @@ const AddCustomer = ({ firebaseUser, firebaseCustomer, addCustomer }) => {
                         <h3>
                             Mijoz qo'shish
                         </h3>
-                        <IoClose onClick={() => addCustomer(false)} />
+                        <IoClose onClick={() => AddCustomers(false)} />
                     </div>
                     <div className="inputs inp">
                         <input onChange={(e) => setCustomerName(e.target.value)} type="text" placeholder="Mijoz ism Familiyasi" />
                         <input onChange={(e) => setPhoneNumber(e.target.value)} type="text" placeholder="Telefon raqami" />
-                        <select style={{ color: selectValue === "" ? "#a5b1c1" : "#000" }} onChange={(e) => setSelectValue(e.target.value)} name="" id="">
+                        <select style={{ color: selectValue === "" ? "#a5b1c1" : "#000" }} onChange={(e) => setSelectValue(e.target.value)} >
                             <option value="" hidden={true}>Kimga biriktiriladi</option>
                             {
                                 firebaseUser.map(item =>
@@ -64,12 +65,12 @@ const AddCustomer = ({ firebaseUser, firebaseCustomer, addCustomer }) => {
                 </div>
                 <div className="customerButtons">
                     <button
-                        onClick={() => addCustomer(false)}
+                        onClick={() => AddCustomers(false)}
                         style={{ background: "#ff1216" }}
                     >
-                        O'chirish <RiDeleteBin5Fill />
+                        Bekor qilish <RiDeleteBin5Fill />
                     </button>
-                    <button onClick={AddCustomer} style={{ background: "#078625" }}>Tugatish <MdLibraryAddCheck /></button>
+                    <button onClick={AddCustomer} style={{ background: "#078625" }}>Qo'shish <MdLibraryAddCheck /></button>
                 </div>
             </div>
         </div>

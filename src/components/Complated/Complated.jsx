@@ -1,6 +1,6 @@
 import "./Complated.css"
 import { useEffect, useState } from "react"
-import { getCustomers } from "../../service/fireStoreCustomerService";
+import { subscribeToCustomers } from "../../service/fireStoreCustomerService";
 
 const Complated = ({ width2, firebaseDoctor, firebaseAdmin, pinCode }) => {
 
@@ -9,16 +9,8 @@ const Complated = ({ width2, firebaseDoctor, firebaseAdmin, pinCode }) => {
     const FirebaseAdmin = firebaseAdmin.find(item => item.code === pinCode)
 
     useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const usersData = await getCustomers();
-                setFirebaseCustomers(usersData);
-            } catch (error) {
-                console.error("Failed to fetch users:", error);
-            }
-        };
-
-        fetchUsers();
+        const unsubscribe = subscribeToCustomers(setFirebaseCustomers);
+        return () => unsubscribe(); // Komponent unmount bo‘lganda kuzatuvni to‘xtatish
     }, []);
 
     return (

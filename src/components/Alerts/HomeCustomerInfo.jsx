@@ -5,14 +5,13 @@ import { IoClose } from "react-icons/io5"
 import { MdLibraryAddCheck } from "react-icons/md"
 import { RiDeleteBin5Fill } from "react-icons/ri"
 import Alert4 from "./ChengeCustomerInfo"
-import { getCustomerIds, updateCustomers } from "../../service/fireStoreCustomerService"
+import { subscribeToCustomerIds, updateCustomers } from "../../service/fireStoreCustomerService"
 import UserContext from "../../Context/Context"
 
-const Alert3 = ({ customerInfo, firebaseDoctor }) => {
-
+const Alert3 = ({ customerInfo, DelateNotify, ChengeNotify, CompletedNotify }) => {
     const [alertHid, setAlertHid] = useState(true)
 
-    const { id, setId, alert4Show, setAlert4Show } = useContext(UserContext);
+    const { setAlert4Show } = useContext(UserContext);
 
     const [deleteOpacity, setDeleteOpacity] = useState(0)
     const [deleteScale, setDeleteScale] = useState(0.8)
@@ -28,37 +27,35 @@ const Alert3 = ({ customerInfo, firebaseDoctor }) => {
 
     const [customerIds, setCustomerIds] = useState([]);
 
+    // **Mijozlarni olish (real vaqt rejimi)**
     useEffect(() => {
-        const fetchCustomerIds = async () => {
-            try {
-                const ids = await getCustomerIds();
-                setCustomerIds(ids);
-            } catch (error) {
-                console.error("Failed to fetch customer IDs:", error);
-            }
-        };
-
-        fetchCustomerIds();
+        const unsubscribe = subscribeToCustomerIds(setCustomerIds);
+        return () => unsubscribe();
     }, []);
 
-    const chengeCustomer = async () => {
+    const delateCustomer = async () => {
+        
+        setAlert4Show(false);
+
         try {
             const customerId = customerInfo.id - 1;
             await updateCustomers(customerIds[customerId], { delate: false });
         } catch (error) {
             console.error("Failed to update user:", error);
         }
-        setAlert4Show(false);
+
+        DelateNotify()
     };
 
     const complatedCustomer = async () => {
         try {
             const customerId = customerInfo.id - 1;
-            await updateCustomers(customerIds[customerId], { complated: false, delate: true });
+            await updateCustomers(customerIds[customerId], { complated: false });
         } catch (error) {
             console.error("Failed to update user:", error);
         }
         setAlert4Show(false);
+        CompletedNotify()
     };
 
     const deleteAlertHidden = () => {
@@ -68,8 +65,13 @@ const Alert3 = ({ customerInfo, firebaseDoctor }) => {
         setAlertEvent("all")
     }
 
-    const doctorCustomers = firebaseDoctor.filter(cust => cust.name === customerInfo.doctorName);
-    const customerIndex = doctorCustomers.findIndex(cust => cust.id === customerInfo.id);
+    const formatDate = (timestamp) => {
+        if (timestamp?.seconds) {
+            const date = new Date(timestamp.seconds * 1000);
+            return `${date.toLocaleDateString()} ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+        }
+        return "Noma'lum";
+    };
 
     return (
         <div className="alertContainer">
@@ -81,13 +83,12 @@ const Alert3 = ({ customerInfo, firebaseDoctor }) => {
                             <IoClose onClick={() => setAlert4Show(false)} />
                         </div>
                         <div className="userInfo">
-                            <h3>Id: {customerInfo.id}</h3>
-                            <h3>Mijoz: {customerInfo.name}</h3>
-                            <h3>Doktor: {customerInfo.doctorName}</h3>
-                            <h3>Tel: {customerInfo.number}</h3>
-                            <h3>Qachon ro'yhatdan o'tgan: </h3>
-                            <h3>{customerInfo.doctorName} doktori bo‘yicha jami mijozlar soni: {doctorCustomers.length}</h3>
-                            <h3>Tanlangan mijoz {customerIndex + 1}-kiruvchi</h3>
+                            <h3>Id: {customerInfo.id || "No'malum"}</h3>
+                            <h3>Mijoz: {customerInfo.name || "No'malum"}</h3>
+                            <h3>Doktor: {customerInfo.doctorName || "No'malum"}</h3>
+                            <h3>Tel: {customerInfo.number || "No'malum"}</h3>
+                            <h3>Qachon ro'yhatdan o'tgan: {formatDate(customerInfo.createdAt) || "No'malum"}</h3>
+                            <h3>Bundan oldingi mijozlar soni: {customerInfo.id ? customerInfo.id - 1 : 0}</h3>
                         </div>
                         <div className="buttons">
                             <button
@@ -104,16 +105,16 @@ const Alert3 = ({ customerInfo, firebaseDoctor }) => {
 
                         <div className="userDelete" style={{ opacity: deleteOpacity, transform: `scale(${deleteScale})`, pointerEvents: deleteEvent }}>
                             <h3>
-                                Rostdanham bu mijozni o'chirmoqchimisiz ?
+                                Rostdanham bu mijozni o'chirmoqchimisiz?
                             </h3>
 
                             <div className="deleteButton">
-                                <button onClick={chengeCustomer}>Ha</button>
+                                <button onClick={delateCustomer}>Ha</button>
                                 <button onClick={deleteAlertHidden}>Yo'q</button>
                             </div>
                         </div>
                     </div>
-                ) : <Alert4 cusInfo={customerInfo} AlertHid={setAlertHid} />
+                ) : <Alert4 chengeNotify={ChengeNotify} cusInfo={customerInfo} AlertHid={setAlertHid} />
             }
         </div>
     )

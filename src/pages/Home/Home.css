@@ -6,7 +6,7 @@
     align-items: flex-start;
 }
 
-.HomeContainer{
+.HomeContainer {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -28,7 +28,7 @@
     background: #ECECEC;
 }
 
-.HomeNavbar > h3 {
+.HomeNavbar>h3 {
     font-size: 18px;
     font-weight: 500;
 }
@@ -101,7 +101,7 @@
 
 /* Profil uchun kod */
 
-.usersInfo{
+.usersInfo {
     width: 220px;
     height: auto;
     padding: 10px;
@@ -119,14 +119,14 @@
     border: 1px solid #ECECEC;
 }
 
-.usersInfo > svg{
+.usersInfo>svg {
     position: absolute;
     top: 10px;
     right: 10px;
     cursor: pointer;
 }
 
-.usersInfo > img{
+.usersInfo>img {
     width: 70px;
     height: 70px;
     object-fit: cover;
@@ -135,7 +135,7 @@
     cursor: pointer;
 }
 
-.usersInfo .textImg{
+.usersInfo .textImg {
     width: 70px;
     height: 70px;
     object-fit: cover;
@@ -144,14 +144,14 @@
     cursor: pointer;
 }
 
-.usersInfo p{
+.usersInfo p {
     color: red;
     display: flex;
     align-items: center;
     gap: 5px;
 }
 
-.usersInfo p svg{
+.usersInfo p svg {
     width: 18px;
     height: 18px;
 }
@@ -184,9 +184,27 @@
     cursor: pointer;
 }
 
-.images svg{
+.images svg {
     position: absolute;
     top: 5px;
     right: 5px;
     cursor: pointer;
+}
+
+.Toastify__toast-container>div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.progressRedBackground{
+    background: red !important;
+}
+
+.progressGreenBackground{
+    background: green !important;
+}
+
+.progressBlueBackground{
+    background: #5f54fe !important;
 }

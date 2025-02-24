@@ -2,7 +2,7 @@ import "./Navbar.css";
 import { NavLink } from "react-router-dom";
 import { FiPieChart, FiUsers } from "react-icons/fi";
 import { BiHomeAlt } from "react-icons/bi";
-import { getAdmin } from "../../service/fireStoreAdminService";
+import { subscribeToAdmins } from "../../service/fireStoreAdminService";
 import { useEffect, useState } from "react";
 import { GoHourglass } from "react-icons/go";
 
@@ -11,16 +11,8 @@ const Navbar = () => {
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
-        const fetchAdmin = async () => {
-            try {
-                const usersData = await getAdmin();
-                setUsers(usersData);
-            } catch (error) {
-                console.error("Failed to fetch users:", error);
-            }
-        };
-
-        fetchAdmin();
+        const unsubscribe = subscribeToAdmins(setUsers);
+        return () => unsubscribe();
     }, []);
 
     const user = users.find((item) => item.code === PINcode);
@@ -34,7 +26,7 @@ const Navbar = () => {
                 <BiHomeAlt style={{ width: "30px", height: "30px" }} />
             </NavLink>
             <NavLink to="/weit" className={({ isActive }) => (isActive ? "active-link" : "")}>
-                <GoHourglass style={{ width: "30px", height: "30px" }}/>
+                <GoHourglass style={{ width: "30px", height: "30px" }} />
             </NavLink>
             {user && user.code === PINcode && (
                 <NavLink to="/users" className={({ isActive }) => (isActive ? "active-link" : "")}>

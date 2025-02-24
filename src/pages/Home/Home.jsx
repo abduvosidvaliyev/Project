@@ -1,121 +1,158 @@
-import "./Home.css"
+import "./Home.css";
 
-import { useContext, useEffect, useState } from "react"
-import Weitlist from "../../components/Weitlist/Weitlist"
-import Complated from "../../components/Complated/Complated"
+import { useContext, useEffect, useState } from "react";
+import Weitlist from "../../components/Weitlist/Weitlist";
+import Complated from "../../components/Complated/Complated";
 import Navbar from "../Navbar/Navbar";
 
-import UserContext from "../../Context/Context"
+import UserContext from "../../Context/Context";
 
-import { addCustomers, getCustomers } from "../../service/fireStoreCustomerService"
-import Alert3 from "../../components/Alerts/HomeCustomerInfo"
-import { getUsers } from "../../service/fireStoreDoctorService"
-import { getAdmin } from "../../service/fireStoreAdminService"
-import Profile from "../../components/Profile"
-import AddCustomer from "../../components/Alerts/AddCustomer"
+import { subscribeToCustomers } from "../../service/fireStoreCustomerService";
+import Alert3 from "../../components/Alerts/HomeCustomerInfo";
+import { getUsers } from "../../service/fireStoreDoctorService";
+import { subscribeToAdmins } from "../../service/fireStoreAdminService";
+import Profile from "../../components/Profile";
+import AddCustomer from "../../components/Alerts/AddCustomer";
+import { toast, ToastContainer } from "react-toastify";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { FiPlusCircle } from "react-icons/fi";
+import { LuFilePenLine } from "react-icons/lu";
 
 const Home = () => {
-    const contextId = useContext(UserContext)
+    const { id, alert4Show, setAlert4Show } = useContext(UserContext)
 
-    const PINcode = JSON.parse(localStorage.getItem("PINcode"))
+    const PINcode = JSON.parse(localStorage.getItem("PINcode"));
 
-    const [FirebaseDoctor, setFirebaseDoctor] = useState([])
-    const [FirebaseAdmin, setFirebaseAdmin] = useState([])
+    const [FirebaseDoctor, setFirebaseDoctor] = useState([]);
+    const [FirebaseAdmin, setFirebaseAdmin] = useState([]);
     const [FirebaseCustomer, setFirebaseCustomers] = useState([]);
 
     const [active, setActive] = useState("home");
-    const [WeitlistShowHid, setWeitlistShowHid] = useState(true)
-    const [WeitlistWidth, setWeitlistWidth] = useState("80%")
-    const [CompletedShowHid, setCompletedShowHid] = useState(true)
-    const [ComplatedWidth, setComplatedWidth] = useState("300px")
-
+    const [WeitlistShowHid, setWeitlistShowHid] = useState(true);
+    const [WeitlistWidth, setWeitlistWidth] = useState("80%");
+    const [CompletedShowHid, setCompletedShowHid] = useState(true);
+    const [ComplatedWidth, setComplatedWidth] = useState("300px");
 
     const allPeges = () => {
-        setActive("home")
-        setWeitlistShowHid(true)
-        setCompletedShowHid(true)
-        setWeitlistWidth("")
-        setComplatedWidth("")
-    }
+        setActive("home");
+        setWeitlistShowHid(true);
+        setCompletedShowHid(true);
+        setWeitlistWidth("");
+        setComplatedWidth("");
+    };
 
     const weitlistShowHid = () => {
-        setWeitlistWidth("100%")
-        setActive("weitlist")
-        setWeitlistShowHid(true)
-        setCompletedShowHid(false)
-    }
+        setWeitlistWidth("100%");
+        setActive("weitlist");
+        setWeitlistShowHid(true);
+        setCompletedShowHid(false);
+    };
 
     const completedShowHid = () => {
-        setComplatedWidth("100%")
-        setActive("complated")
-        setWeitlistShowHid(false)
-        setCompletedShowHid(true)
-    }
+        setComplatedWidth("100%");
+        setActive("complated");
+        setWeitlistShowHid(false);
+        setCompletedShowHid(true);
+    };
 
+    // **Doktorlarni olish (real vaqt rejimi)**
     useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const usersData = await getUsers();
-                setFirebaseDoctor(usersData);
-            } catch (error) {
-                console.error("Failed to fetch users:", error);
-            }
-        };
-
-        fetchUsers();
+        const unsubscribe = getUsers(setFirebaseDoctor);
+        return () => unsubscribe();
     }, []);
 
+    // **Adminlarni olish (real vaqt rejimi)**
     useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const usersData = await getAdmin();
-                setFirebaseAdmin(usersData);
-            } catch (error) {
-                console.error("Failed to fetch users:", error);
-            }
-        };
-
-        fetchUsers();
+        const unsubscribe = subscribeToAdmins(setFirebaseAdmin);
+        return () => unsubscribe();
     }, []);
 
+    // **Mijozlarni olish (real vaqt rejimi)**
     useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const usersData = await getCustomers();
-                setFirebaseCustomers(usersData);
-            } catch (error) {
-                console.error("Failed to fetch users:", error);
-            }
-        };
-
-        fetchUsers();
+        const unsubscribe = subscribeToCustomers(setFirebaseCustomers);
+        return () => unsubscribe();
     }, []);
 
-    const [users, setUsers] = useState([]);
 
-    useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const usersData = await addCustomers();
-                setUsers(usersData);
-            } catch (error) {
-                console.error("Failed to fetch users:", error);
+    const customerInfo = FirebaseCustomer.find(item => item.id === id);
+
+    const [alertShow, setAlertShow] = useState(false);
+    const [addCustomerAlert, setAddCustomerAlert] = useState(false);
+
+    const delateNotify = () => {
+        toast.success(
+            <div className="flex items-center justify-between w-full">
+                <RiDeleteBin6Line size={25} color="#ff0000" />
+                <span className="text-xl" style={{ color: "#ff0000" }}>O‘chirildi!</span>
+            </div>,
+            {
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                closeButton: false,
+                icon: false,
+                position: "bottom-right",
+                progressClassName: "progressRedBackground"
             }
-        };
+        );
+    };
 
-        fetchUsers();
-    }, []);
+    const addNotify = () => {
+        toast.success(
+            <div className="flex items-center justify-between w-full">
+                <FiPlusCircle size={25} color="#078625" />
+                <span className="text-xl" style={{ color: "#078625" }}>Qo‘shildi!</span>
+            </div>,
+            {
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                closeButton: false,
+                icon: false,
+                position: "bottom-right",
+                progressClassName: "progressGreenBackground"
+            }
+        );
+    };
 
-    const customerInfo = FirebaseCustomer.find(item => item.id === contextId.id)
+    const chengeNotify = () => {
+        toast.success(
+            <div className="flex items-center justify-between w-full">
+                <LuFilePenLine size={25} color="#5f54fe" />
+                <span className="text-xl" style={{ color: "#5f54fe" }}>O‘zgartirildi!</span>
+            </div>,
+            {
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                closeButton: false,
+                icon: false,
+                position: "bottom-right",
+                progressClassName: "progressBlueBackground"
+            }
+        );
+    };
 
-    console.log(customerInfo)    
-
-    const [alertShow, setAlertShow] = useState(false)
-
-    const [addCustomerAlert, setAddCustomerAlert] = useState(false)
+    const completedNotify = () => {
+        toast.success(
+            <div className="flex items-center justify-between w-full">
+                <FiPlusCircle size={25} color="#078625" />
+                <span className="text-xl" style={{ color: "#078625" }}>Tugatildi!</span>
+            </div>,
+            {
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                closeButton: false,
+                icon: false,
+                position: "bottom-right",
+                progressClassName: "progressGreenBackground"
+            }
+        );
+    };
 
     return (
-        <section className="Home" >
+        <section className="Home">
             <Navbar />
             <div className="HomeContainer">
                 <nav className="HomeNavbar">
@@ -123,7 +160,7 @@ const Home = () => {
                         <button
                             style={{
                                 border: `2px solid ${active === "home" ? "#000" : "transparent"}`,
-                                color: active === "home" ? "#ee9314" : ""
+                                color: active === "home" ? "#ee9314" : "",
                             }}
                             onClick={allPeges}
                         >
@@ -132,7 +169,7 @@ const Home = () => {
                         <button
                             style={{
                                 border: `2px solid ${active === "weitlist" ? "#000" : "transparent"}`,
-                                color: active === "weitlist" ? "#ee9314" : ""
+                                color: active === "weitlist" ? "#ee9314" : "",
                             }}
                             onClick={weitlistShowHid}
                         >
@@ -141,24 +178,56 @@ const Home = () => {
                         <button
                             style={{
                                 border: `2px solid ${active === "complated" ? "#000" : "transparent"}`,
-                                color: active === "complated" ? "#ee9314" : ""
+                                color: active === "complated" ? "#ee9314" : "",
                             }}
                             onClick={completedShowHid}
                         >
                             Tugatilganlar
                         </button>
-                    </div >
+                    </div>
                     <Profile />
-                </nav >
+                </nav>
                 <header className="weitlist">
-                    {WeitlistShowHid ? <Weitlist addCustomer={setAddCustomerAlert} alertShow={contextId.setAlert4Show} width1={WeitlistWidth} /> : ""}
-                    {CompletedShowHid ? <Complated firebaseDoctor={FirebaseDoctor} firebaseAdmin={FirebaseAdmin} pinCode={PINcode} width2={ComplatedWidth} /> : ""}
+                    {WeitlistShowHid ?
+                        <Weitlist
+                            addCustomer={setAddCustomerAlert}
+                            alertShow={setAlert4Show}
+                            width1={WeitlistWidth}
+                        />
+                        : ""
+                    }
+                    {CompletedShowHid ?
+                        <Complated
+                            firebaseDoctor={FirebaseDoctor}
+                            firebaseAdmin={FirebaseAdmin}
+                            pinCode={PINcode}
+                            width2={ComplatedWidth}
+                        />
+                        : ""
+                    }
                 </header>
-                {contextId.alert4Show ? <Alert3 alertShow={setAlertShow} firebaseDoctor={FirebaseDoctor} customerInfo={customerInfo} /> : ""}
-                {addCustomerAlert ? <AddCustomer addCustomer={setAddCustomerAlert} firebaseUser={FirebaseDoctor} firebaseCustomer={FirebaseCustomer} /> : ""}
             </div>
-        </section >
-    )
-}
+            {alert4Show ?
+                <Alert3
+                    DelateNotify={delateNotify}
+                    ChengeNotify={chengeNotify}
+                    CompletedNotify={completedNotify}
+                    customerInfo={customerInfo}
+                />
+                : ""
+            }
+            {addCustomerAlert ?
+                <AddCustomer
+                    AddCustomers={setAddCustomerAlert}
+                    AddNotify={addNotify}
+                    firebaseUser={FirebaseDoctor}
+                    firebaseCustomer={FirebaseCustomer}
+                />
+                : ""
+            }
+            <ToastContainer />
+        </section>
+    );
+};
 
-export default Home
+export default Home;

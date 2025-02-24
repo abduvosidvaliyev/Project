@@ -5,7 +5,7 @@ import { RiDeleteBin5Fill } from "react-icons/ri"
 import { addUser } from "../../service/fireStoreDoctorService"
 import { useState } from "react"
 
-const AddUser = ({ AddUser, Users, doctor }) => {
+const AddUser = ({ AddUser, AddNotify, doctor }) => {
 
     const [userName, setUserName] = useState("")
     const [userJob, setUserJob] = useState("")
@@ -39,6 +39,7 @@ const AddUser = ({ AddUser, Users, doctor }) => {
         }
 
         AddUser(false)
+        AddNotify()
     }
 
     return (

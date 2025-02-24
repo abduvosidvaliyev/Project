@@ -1,55 +1,52 @@
 // services/firestoreService.js
 import { db } from "../firebase";
-import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, orderBy, query } from "firebase/firestore";
+import { collection, query, where, getDocs, addDoc, doc, updateDoc, deleteDoc, orderBy, onSnapshot } from "firebase/firestore";
 
-// Foydalanuvchi qo'shish
-export const addCustomers = async (userData) => {
+// Yangi mijoz qo‘shish
+export const addCustomer = async (customerData) => {
     try {
-        const docRef = await addDoc(collection(db, "customers"), userData);
-        return docRef.id;
+        const customersRef = collection(db, "customers");
+        const docRef = await addDoc(customersRef, customerData);
+        return { id: docRef.id, ...customerData };
     } catch (error) {
-        console.error("Error adding user: ", error);
+        console.error("Error adding customer: ", error);
         throw error;
     }
 };
 
-
-
-// Foydalanuvchilarni o'qish
-export const getCustomers = async () => {
-    try {
-        const querySnapshot = await getDocs(collection(db, "customers"));
-        
-        const customers = querySnapshot.docs.map((doc) => {
-            return {
-                id: doc.id,
-                ...doc.data()
-            };
-        });
-
-        return customers;
-    } catch (error) {
-        console.error("Error fetching users: ", error);
-        throw error;
-    }
+// Foydalanuvchilarni o'qish (onSnapshot bilan)
+export const subscribeToCustomers = (callback) => {
+    const q = query(collection(db, "customers"));
+    return onSnapshot(q, (querySnapshot) => {
+        const customers = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data()
+        }));
+        callback(customers);
+    });
 };
 
-
-
-// Foydalanuvchilarni o'qish faqat ID'lar bilan
-export const getCustomerIds = async () => {
-    try {
-        const q = query(collection(db, "customers"), orderBy("id", "asc"));
-        const querySnapshot = await getDocs(q);
-
+// Foydalanuvchilarni ID bo‘yicha olish (onSnapshot bilan)
+export const subscribeToCustomerIds = (callback) => {
+    const q = query(collection(db, "customers"), orderBy("id", "asc"));
+    return onSnapshot(q, (querySnapshot) => {
         const customerIds = querySnapshot.docs.map(doc => doc.id);
-        return customerIds;
-    } catch (error) {
-        console.error("Error fetching customer IDs: ", error);
-        throw error;
-    }
+        callback(customerIds);
+    });
 };
 
+// Doktorga tegishli mijozlarni olish (onSnapshot bilan)
+export const subscribeToCustomersByDoctorId = (doctorName, callback) => {
+    const customersRef = collection(db, "customers");
+    const q = query(customersRef, where("doctorName", "==", doctorName));
+    return onSnapshot(q, (querySnapshot) => {
+        const customers = querySnapshot.docs.map(doc => ({
+            customerId: doc.id,
+            ...doc.data()
+        }));
+        callback(customers);
+    });
+};
 
 // Foydalanuvchini yangilash
 export const updateCustomers = async (id, updatedData) => {
@@ -57,12 +54,12 @@ export const updateCustomers = async (id, updatedData) => {
         const userDoc = doc(db, "customers", id);
         await updateDoc(userDoc, updatedData);
     } catch (error) {
-        console.error("Error updating user: ", error);
+        console.error("Error updating customer: ", error);
         throw error;
     }
 };
 
-// Foydalanuvchini o'chirish
+// Foydalanuvchini o‘chirish
 export const deleteCustomers = async (id) => {
     try {
         const userDoc = doc(db, "customers", id);
@@ -72,3 +69,19 @@ export const deleteCustomers = async (id) => {
         throw error;
     }
 };
+
+// Doktorga tegishli mijozlarni olish
+export const getCustomersByDoctorId = (doctorName, callback) => {
+    const customersRef = collection(db, "customers");
+    const q = query(customersRef, where("doctorName", "==", doctorName));
+
+    // **onSnapshot ishlatilmoqda va unsubscribe funksiyasini qaytaryapti**
+    return onSnapshot(q, (snapshot) => {
+        const customers = snapshot.docs.map(doc => ({
+            customerId: doc.id,
+            ...doc.data()
+        }));
+        callback(customers);
+    });
+};
+

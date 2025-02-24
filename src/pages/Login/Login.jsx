@@ -2,7 +2,7 @@ import "./Login.css"
 import background from "./Images/background.png"
 import { useEffect, useState } from "react"
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa"
-import { getAdmin } from "../../service/fireStoreAdminService";
+import { getAdmin, subscribeToAdmins } from "../../service/fireStoreAdminService";
 import { getUsers } from "../../service/fireStoreDoctorService";
 
 const Login = () => {
@@ -37,7 +37,7 @@ const Login = () => {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const userData = await getAdmin()
+                const userData = await subscribeToAdmins()
                 setFirebaseAdmin(userData)
             } catch (error) {
                 console.error("Failed to fetch admin:", error)

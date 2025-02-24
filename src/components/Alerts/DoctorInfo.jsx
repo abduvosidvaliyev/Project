@@ -9,7 +9,7 @@ import Alert2 from "./ChangeDoctorInfo";
 import { useEffect, useState } from "react";
 import { deleteUser, getUsersId } from "../../service/fireStoreDoctorService";
 
-const Alert1 = ({ alertShow, userInformation, doctor }) => {
+const Alert1 = ({ alertShow, DelateNotify, ChengeNotify, userInformation, doctor }) => {
 
     const [doctorIds, setDoctorIds] = useState([]);
 
@@ -33,6 +33,7 @@ const Alert1 = ({ alertShow, userInformation, doctor }) => {
         try {
             await deleteUser(doctorIds[doctorId - 1]); 
             alertShow(false);
+            DelateNotify()
         } catch (error) {
             console.error("Xatolik yuz berdi:", error);
         }
@@ -54,8 +55,9 @@ const Alert1 = ({ alertShow, userInformation, doctor }) => {
                         <IoClose onClick={() => alertShow(false)} />
                     </div>
                     <div className="userInfo">
-                        <h3>Yo'nalish: {userInformation.job || "Noma'lum"}</h3>
+                        <h3>Id: {userInformation.id}</h3>
                         <h3>Doktor: {userInformation.name || "Noma'lum"}</h3>
+                        <h3>Yo'nalish: {userInformation.job || "Noma'lum"}</h3>
                         <h3>Oylik maosh: {userInformation.money || "Noma'lum"}</h3>
                         <h3>Tel: {userInformation.number || "Noma'lum"}</h3>
                         <h3>Login: {userInformation.name ? userInformation.name.split(" ")[0] : "Noma'lum"}</h3>
@@ -78,7 +80,7 @@ const Alert1 = ({ alertShow, userInformation, doctor }) => {
                     </div>
                 </div>
             ) : (
-                <Alert2 doctor={doctor} alertShow={alertShow} userInfo={userInformation} alertHid={setAlert1Hid} />
+                <Alert2 chengeNotify={ChengeNotify} doctor={doctor} alertShow={alertShow} userInfo={userInformation} alertHid={setAlert1Hid} />
             )}
         </div>
     );

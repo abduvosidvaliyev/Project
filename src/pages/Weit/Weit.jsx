@@ -3,11 +3,14 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../Navbar/Navbar";
 import Profile from "../../components/Profile";
 import { getUsers } from "../../service/fireStoreDoctorService";
-import { getCustomers } from "../../service/fireStoreCustomerService";
+import { getCustomers, subscribeToCustomers } from "../../service/fireStoreCustomerService";
 import Alert5 from "../../components/Alerts/WeitCustomerInfo";
 import ReactPaginate from "react-paginate";
-import { LuFilterX } from "react-icons/lu";
-import { getAdmin } from "../../service/fireStoreAdminService";
+import { LuFilePenLine, LuFilterX } from "react-icons/lu";
+import { subscribeToAdmins } from "../../service/fireStoreAdminService";
+import { toast } from "react-toastify";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { FiPlusCircle } from "react-icons/fi";
 
 const Weitlist = () => {
     const PINcode = JSON.parse(localStorage.getItem("PINcode"))
@@ -18,19 +21,6 @@ const Weitlist = () => {
 
     const FindAdmin = firebaseAdmin.find(item => item.code === PINcode)
     const FindUser = users.find(item => item.code === PINcode)
-
-    useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const usersData = await getAdmin();
-                setFirebaseAdmin(usersData);
-            } catch (error) {
-                console.error("Failed to fetch users:", error);
-            }
-        };
-
-        fetchUsers();
-    }, []);
 
     const [filters, setFilters] = useState({
         id: "",
@@ -44,29 +34,23 @@ const Weitlist = () => {
     const [itemsPerPage, setItemsPerPage] = useState(10);
 
     useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const usersData = await getUsers();
-                setUsers(usersData);
-            } catch (error) {
-                console.error("Failed to fetch users:", error);
-            }
-        };
-        fetchUsers();
+        const unsubscribe = subscribeToAdmins(setFirebaseAdmin);
+        return () => unsubscribe();
     }, []);
 
     useEffect(() => {
-        const fetchCustomers = async () => {
-            try {
-                const customerData = await getCustomers();
-                customerData.sort((a, b) => a.id - b.id);
-                setCustomers(customerData);
-                setFilteredCustomers(customerData);
-            } catch (error) {
-                console.error("Failed to fetch customers:", error);
-            }
-        };
-        fetchCustomers();
+        const unsubscribe = getUsers(setUsers);
+        return () => unsubscribe();
+    }, []);
+
+    useEffect(() => {
+        const unsubscribe = subscribeToCustomers((customerData) => {
+            customerData.sort((a, b) => a.id - b.id);
+            setCustomers(customerData);
+            setFilteredCustomers(customerData);
+        });
+
+        return () => unsubscribe();
     }, []);
 
     useEffect(() => {
@@ -118,12 +102,85 @@ const Weitlist = () => {
         (currentPage + 1) * itemsPerPage
     );
 
+    const delateNotify = () => {
+        toast.success(
+            <div className="flex items-center justify-between w-full">
+                <RiDeleteBin6Line size={25} color="#ff0000" />
+                <span className="text-xl" style={{ color: "#ff0000" }}>O‘chirildi!</span>
+            </div>,
+            {
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                closeButton: false,
+                icon: false,
+                position: "bottom-right",
+                progressClassName: "progressRedBackground"
+            }
+        );
+    };
+
+    const addNotify = () => {
+        toast.success(
+            <div className="flex items-center justify-between w-full">
+                <FiPlusCircle size={25} color="#078625" />
+                <span className="text-xl" style={{ color: "#078625" }}>Qo‘shildi!</span>
+            </div>,
+            {
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                closeButton: false,
+                icon: false,
+                position: "bottom-right",
+                progressClassName: "progressGreenBackground"
+            }
+        );
+    };
+
+    const chengeNotify = () => {
+        toast.success(
+            <div className="flex items-center justify-between w-full">
+                <LuFilePenLine size={25} color="#5f54fe" />
+                <span className="text-xl" style={{ color: "#5f54fe" }}>O‘zgartirildi!</span>
+            </div>,
+            {
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                closeButton: false,
+                icon: false,
+                position: "bottom-right",
+                progressClassName: "progressBlueBackground"
+            }
+        );
+    };
+
+    const completedNotify = () => {
+        toast.success(
+            <div className="flex items-center justify-between w-full">
+                <FiPlusCircle size={25} color="#078625" />
+                <span className="text-xl" style={{ color: "#078625" }}>Tugatildi!</span>
+            </div>,
+            {
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                closeButton: false,
+                icon: false,
+                position: "bottom-right",
+                progressClassName: "progressGreenBackground"
+            }
+        );
+    };
+
+
     return (
         <section className="weitlistPage">
             <Navbar />
             <div className="weitlistContainer">
                 <div className="weitNavbar sticky top-0 z-10">
-                    <h3>Bugungi kunlik barcha mijozlar: {customers.length} ta </h3>
+                    <h3>Barcha mijozlar: {customers.length} ta </h3>
                     <Profile />
                 </div>
                 <div className="weitCustomers">
@@ -212,8 +269,17 @@ const Weitlist = () => {
             </div>
 
             {alert5Show && (
-                FindAdmin ? <div className="alertContainer">
-                    <Alert5 cusInfo={customerInfo} customer={customers} alertShow={setAlert5Show} />
+                FindAdmin ? 
+                <div className="alertContainer">
+                    <Alert5 
+                    ChengeNotify={chengeNotify} 
+                    cusInfo={customerInfo} 
+                    customer={customers} 
+                    alertShow={setAlert5Show} 
+                    CompletedNotify={completedNotify}
+                    DelateNotify={delateNotify}
+                    AddNotify={addNotify}
+                    />
                 </div> : ""
             )}
 

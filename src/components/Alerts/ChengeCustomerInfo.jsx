@@ -4,46 +4,31 @@ import { CiEdit } from "react-icons/ci"
 
 import { useContext, useEffect, useState } from "react"
 import UserContext from "../../Context/Context"
-import { getUsers, updateUser } from "../../service/fireStoreDoctorService"
-import { getCustomerIds, updateCustomers } from "../../service/fireStoreCustomerService"
+import { getUsers } from "../../service/fireStoreDoctorService"
+import { subscribeToCustomerIds, updateCustomers } from "../../service/fireStoreCustomerService"
 
-const Alert4 = ({ AlertHid, cusInfo }) => {
+const Alert4 = ({ AlertHid, chengeNotify, cusInfo }) => {
 
-    const contextId = useContext(UserContext)
+    const { setAlert4Show } = useContext(UserContext);
 
     const [users, setUsers] = useState([]);
 
+    // **Mijozlarni olish (real vaqt rejimi)**
     useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const usersData = await getUsers();
-                setUsers(usersData);
-            } catch (error) {
-                console.error("Failed to fetch users:", error);
-            }
-        };
-
-        fetchUsers();
+        const unsubscribe = getUsers(setUsers);
+        return () => unsubscribe();
     }, []);
 
     const [name, setName] = useState("")
     const [number, setNumber] = useState("")
     const [doctor, setDoctor] = useState("")
 
-    
+
     const [customerIds, setCustomerIds] = useState([]);
 
     useEffect(() => {
-        const fetchCustomerIds = async () => {
-            try {
-                const ids = await getCustomerIds();
-                setCustomerIds(ids);
-            } catch (error) {
-                console.error("Failed to fetch customer IDs:", error);
-            }
-        };
-
-        fetchCustomerIds();
+        const unsubscribe = subscribeToCustomerIds(setCustomerIds);
+        return () => unsubscribe();
     }, []);
 
     const chengeCustomer = async () => {
@@ -51,18 +36,21 @@ const Alert4 = ({ AlertHid, cusInfo }) => {
             alert("Iltimos, barcha maydonlarni to‘ldiring!");
             return;
         }
-    
-        try {            
-            await updateCustomers(customerIds[cusInfo.id - 1], { 
-                name: name, 
-                doctorName: doctor  
+
+        setAlert4Show(false);
+
+        try {
+            await updateCustomers(customerIds[cusInfo.id - 1], {
+                name: name,
+                number: number,
+                doctorName: doctor
             });
         } catch (error) {
             console.error("Failed to update user:", error);
         }
-        contextId.setAlert4Show(false);
+        chengeNotify()
     };
-    
+
 
     return (
         <div className="alert4">
@@ -73,9 +61,9 @@ const Alert4 = ({ AlertHid, cusInfo }) => {
             </div>
             <div className="editInputs">
                 <input type="text" onChange={(e) => setName(e.target.value)} placeholder="Mijoz ism familyasi" />
-                <input type="text" onChange={(e) => setNumber(e.target.value)} placeholder="Telifon raqami: " />
+                <input type="text" onChange={(e) => setNumber(e.target.value)} placeholder="Telefon raqami: " />
                 <select name="" onChange={(e) => setDoctor(e.target.value)} className="selectDoctor">
-                    <option hidden={true} value="">Doktor tanlash</option> 
+                    <option hidden={true} value="">Doktor tanlash</option>
 
                     {
                         users.map(item =>
