@@ -34,8 +34,12 @@ const Alert2 = ({ alertShow, chengeNotify, alertHid, userInfo }) => {
             unsubscribeCustomers();
         };
     }, []);
-
+    
     const updateDoctorAndCustomers = async () => {
+
+        alertShow(false);
+        chengeNotify()
+        
         try {
             const doctorId = usersId[userInfo.id - 1];
 
@@ -54,8 +58,6 @@ const Alert2 = ({ alertShow, chengeNotify, alertHid, userInfo }) => {
 
             await Promise.all(updatePromises);
 
-            alertShow(false);
-            chengeNotify()
         } catch (error) {
             console.error("Failed to update doctor and related customers:", error);
         }

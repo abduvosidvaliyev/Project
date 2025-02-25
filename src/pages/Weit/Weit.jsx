@@ -8,7 +8,7 @@ import Alert5 from "../../components/Alerts/WeitCustomerInfo";
 import ReactPaginate from "react-paginate";
 import { LuFilePenLine, LuFilterX } from "react-icons/lu";
 import { subscribeToAdmins } from "../../service/fireStoreAdminService";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FiPlusCircle } from "react-icons/fi";
 
@@ -236,7 +236,7 @@ const Weitlist = () => {
                                         </td>
                                     </tr>
                                 )) : FindUser ? currentItems.filter(item => item.doctorName === FindUser.name).map((item, index) => (
-                                    <tr key={index} onClick={() => alertShow(item)} className="cursor-pointer one" style={{ background: index % 2 === 0 ? "#f7f7f7" : "#ececec" }}>
+                                    <tr key={index} onClick={() => alertShow(item)} className="cursor-pointer one" style={{ background: index % 2 === 0 ? "#f9f9f9" : "#ececec" }}>
                                         <td>{item.id}</td>
                                         <td>{item.name}</td>
                                         <td>{item.doctorName}</td>
@@ -266,21 +266,22 @@ const Weitlist = () => {
                         )}
                     </div>
                 </div>
+                <ToastContainer />
             </div>
 
             {alert5Show && (
-                FindAdmin ? 
-                <div className="alertContainer">
-                    <Alert5 
-                    ChengeNotify={chengeNotify} 
-                    cusInfo={customerInfo} 
-                    customer={customers} 
-                    alertShow={setAlert5Show} 
-                    CompletedNotify={completedNotify}
-                    DelateNotify={delateNotify}
-                    AddNotify={addNotify}
-                    />
-                </div> : ""
+                FindAdmin ?
+                    <div className="alertContainer">
+                        <Alert5
+                            ChengeNotify={chengeNotify}
+                            cusInfo={customerInfo}
+                            customer={customers}
+                            alertShow={setAlert5Show}
+                            CompletedNotify={completedNotify}
+                            DelateNotify={delateNotify}
+                            AddNotify={addNotify}
+                        />
+                    </div> : ""
             )}
 
         </section>

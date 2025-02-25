@@ -19,6 +19,9 @@ const AddUser = ({ AddUser, AddNotify, doctor }) => {
             alert("Barcha joylarni to'ldiring")
             return
         }
+        
+        AddUser(false)
+        AddNotify()
 
         try {
             const add = await addUser({
@@ -38,8 +41,6 @@ const AddUser = ({ AddUser, AddNotify, doctor }) => {
             console.error("Failed to add user:", error)
         }
 
-        AddUser(false)
-        AddNotify()
     }
 
     return (

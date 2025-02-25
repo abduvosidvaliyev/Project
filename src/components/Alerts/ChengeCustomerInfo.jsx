@@ -38,6 +38,7 @@ const Alert4 = ({ AlertHid, chengeNotify, cusInfo }) => {
         }
 
         setAlert4Show(false);
+        chengeNotify()
 
         try {
             await updateCustomers(customerIds[cusInfo.id - 1], {
@@ -48,7 +49,6 @@ const Alert4 = ({ AlertHid, chengeNotify, cusInfo }) => {
         } catch (error) {
             console.error("Failed to update user:", error);
         }
-        chengeNotify()
     };
 
 

@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { HiArrowPath } from "react-icons/hi2";
 import Alert6 from "./WeitChengeCustomerInfo";
 
-const Alert5 = ({ cusInfo, ChengeNotify, AddNotify, CompletedNotify, DelateNotify, customer, alertShow }) => {
+const Alert5 = ({ cusInfo, AddNotify, CompletedNotify, DelateNotify, customer, alertShow }) => {
     const [customerIds, setCustomerIds] = useState([]);
     const [cusArray, setCusArray] = useState([]);
     const [alert2Show, setalert2Show] = useState(false);
@@ -103,7 +103,7 @@ const Alert5 = ({ cusInfo, ChengeNotify, AddNotify, CompletedNotify, DelateNotif
     const reyloadCustomer2 = async (customerInfo) => {
 
         alertShow(false);
-
+        
         try {
             const customerDocId = customerIds[customerInfo - 1];
             if (!customerDocId) {
@@ -111,12 +111,12 @@ const Alert5 = ({ cusInfo, ChengeNotify, AddNotify, CompletedNotify, DelateNotif
                 return;
             }
             const doctorRef = doc(db, "customers", customerDocId);
-            await updateDoc(doctorRef, { complated: true });
+            await updateDoc(doctorRef, { delate: true });
         } catch (error) {
             console.error("Xatolik yuz berdi:", error);
         }
-
-        CompletedNotify()
+        
+        AddNotify()
     };
 
     const formatDate = (timestamp) => {

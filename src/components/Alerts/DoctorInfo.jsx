@@ -10,30 +10,20 @@ import { useEffect, useState } from "react";
 import { deleteUser, getUsersId } from "../../service/fireStoreDoctorService";
 
 const Alert1 = ({ alertShow, DelateNotify, ChengeNotify, userInformation, doctor }) => {
-
     const [doctorIds, setDoctorIds] = useState([]);
 
     useEffect(() => {
-        const fetchUSerId = async () => {
-            try {
-                const ids = await getUsersId();
-                setDoctorIds(ids);
-            } catch (error) {
-                console.error("Failed to fetch customer IDs:", error);
-            }
-        };
-
-        fetchUSerId();
+        const unsubscribe = getUsersId(setDoctorIds);
+        return () => unsubscribe(); // Cleanup function to unsubscribe on unmount
     }, []);
-
 
     const [alert1Hid, setAlert1Hid] = useState(true);
 
     const deleteDoctor = async (doctorId) => {
         try {
-            await deleteUser(doctorIds[doctorId - 1]); 
+            await deleteUser(doctorIds[doctorId - 1]);
             alertShow(false);
-            DelateNotify()
+            DelateNotify();
         } catch (error) {
             console.error("Xatolik yuz berdi:", error);
         }
@@ -80,7 +70,13 @@ const Alert1 = ({ alertShow, DelateNotify, ChengeNotify, userInformation, doctor
                     </div>
                 </div>
             ) : (
-                <Alert2 chengeNotify={ChengeNotify} doctor={doctor} alertShow={alertShow} userInfo={userInformation} alertHid={setAlert1Hid} />
+                <Alert2
+                    chengeNotify={ChengeNotify}
+                    doctor={doctor}
+                    alertShow={alertShow}
+                    userInfo={userInformation}
+                    alertHid={setAlert1Hid}
+                />
             )}
         </div>
     );

@@ -10,13 +10,17 @@ const AddCustomer = ({ firebaseUser, firebaseCustomer, AddNotify, AddCustomers }
     const [selectValue, setSelectValue] = useState("")
     const [customerName, setCustomerName] = useState("")
     const [phoneNumber, setPhoneNumber] = useState("")
-
+    
     const AddCustomer = async () => {        
         if (!selectValue || !customerName || !phoneNumber) {
             alert("Barcha joylarni to'ldiring");
             return;
         }
 
+        AddCustomers(false);
+        
+        AddNotify()
+        
         const newCustomer = {
             id: firebaseCustomer.length + 1,
             name: customerName,
@@ -33,8 +37,6 @@ const AddCustomer = ({ firebaseUser, firebaseCustomer, AddNotify, AddCustomers }
             console.error("Failed to add user:", error);
         }
 
-        AddCustomers(false);
-        AddNotify()
     };
 
     return (
