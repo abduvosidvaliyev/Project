@@ -101,7 +101,7 @@ const Weitlist = ({ width1, addCustomer }) => {
                     </div>
                 ) : null}
 
-                <div className="customerPlus" onClick={() => addCustomer(true)}>
+                <div className="customerPlus" onClick={() => FirebaseUsers.length < 0 ? addCustomer(true) : alert("Iltimos oldin doktor qo'shing")}>
                     <h3>Mijoz qo'shish</h3>
                     <HiPlus />
                 </div>
