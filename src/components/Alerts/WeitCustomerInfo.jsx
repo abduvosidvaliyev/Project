@@ -84,6 +84,7 @@ const Alert5 = ({ cusInfo, AddNotify, CompletedNotify, DelateNotify, customer, a
     const reyloadCustomer1 = async (customerInfo) => {
 
         alertShow(false);
+        AddNotify()
 
         try {
             const customerDocId = customerIds[customerInfo - 1];
@@ -97,12 +98,12 @@ const Alert5 = ({ cusInfo, AddNotify, CompletedNotify, DelateNotify, customer, a
             console.error("Xatolik yuz berdi:", error);
         }
 
-        AddNotify()
     };
 
     const reyloadCustomer2 = async (customerInfo) => {
 
         alertShow(false);
+        AddNotify()
         
         try {
             const customerDocId = customerIds[customerInfo - 1];
@@ -116,7 +117,6 @@ const Alert5 = ({ cusInfo, AddNotify, CompletedNotify, DelateNotify, customer, a
             console.error("Xatolik yuz berdi:", error);
         }
         
-        AddNotify()
     };
 
     const formatDate = (timestamp) => {

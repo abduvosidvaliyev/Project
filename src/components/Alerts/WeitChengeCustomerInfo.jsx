@@ -31,6 +31,7 @@ const Alert6 = ({ alertShow, alert2Show, cusInfo }) => {
             alert("Iltimos, barcha maydonlarni to‘ldiring!");
             return;
         }
+        alert2Show(false)
 
         try {
             await updateCustomers(customerIds[cusInfo.id - 1], {
@@ -41,7 +42,6 @@ const Alert6 = ({ alertShow, alert2Show, cusInfo }) => {
         } catch (error) {
             console.error("Failed to update user:", error);
         }
-        alert2Show(false)
     };
 
     return (

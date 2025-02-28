@@ -18,8 +18,8 @@ const AddCustomer = ({ firebaseUser, firebaseCustomer, AddNotify, AddCustomers }
         }
 
         AddCustomers(false);
-        
         AddNotify()
+        
         
         const newCustomer = {
             id: firebaseCustomer.length + 1,

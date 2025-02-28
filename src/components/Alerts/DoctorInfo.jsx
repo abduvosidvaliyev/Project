@@ -20,10 +20,10 @@ const Alert1 = ({ alertShow, DelateNotify, ChengeNotify, userInformation, doctor
     const [alert1Hid, setAlert1Hid] = useState(true);
 
     const deleteDoctor = async (doctorId) => {
+        alertShow(false);
+        DelateNotify();
         try {
             await deleteUser(doctorIds[doctorId - 1]);
-            alertShow(false);
-            DelateNotify();
         } catch (error) {
             console.error("Xatolik yuz berdi:", error);
         }

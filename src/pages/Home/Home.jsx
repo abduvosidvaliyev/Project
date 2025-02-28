@@ -76,7 +76,6 @@ const Home = () => {
 
     const customerInfo = FirebaseCustomer.find(item => item.id === id);
 
-    const [alertShow, setAlertShow] = useState(false);
     const [addCustomerAlert, setAddCustomerAlert] = useState(false);
 
     const delateNotify = () => {

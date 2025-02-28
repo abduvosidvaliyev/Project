@@ -36,6 +36,7 @@ const Alert3 = ({ customerInfo, DelateNotify, ChengeNotify, CompletedNotify }) =
     const delateCustomer = async () => {
         
         setAlert4Show(false);
+        DelateNotify()
 
         try {
             const customerId = customerInfo.id - 1;
@@ -44,18 +45,17 @@ const Alert3 = ({ customerInfo, DelateNotify, ChengeNotify, CompletedNotify }) =
             console.error("Failed to update user:", error);
         }
 
-        DelateNotify()
     };
 
     const complatedCustomer = async () => {
+        setAlert4Show(false);
+        CompletedNotify()
         try {
             const customerId = customerInfo.id - 1;
             await updateCustomers(customerIds[customerId], { complated: false });
         } catch (error) {
             console.error("Failed to update user:", error);
         }
-        setAlert4Show(false);
-        CompletedNotify()
     };
 
     const deleteAlertHidden = () => {

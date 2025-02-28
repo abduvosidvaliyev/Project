@@ -62,7 +62,7 @@ const AddUser = ({ AddUser, AddNotify, doctor }) => {
                 </div>
                 <div className="customerButtons">
                     <button
-                        onClick={() => addUser(false)}
+                        onClick={() => AddUser(false)}
                         style={{ background: "#ff1216" }}
                     >
                         Bekor qilish <RiDeleteBin5Fill />

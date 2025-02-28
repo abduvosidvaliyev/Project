@@ -1,55 +1,76 @@
 import "./Statistics.css";
+import React, { useEffect, useState } from "react";
 import Navbar from "../Navbar/Navbar";
 import Profile from "../../components/Profile";
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
-import { useEffect, useState } from "react";
-import { getUsers, getCustomersByDoctor } from "../../service/fireStoreDoctorService";
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, } from "recharts";
+import { subscribeToCustomers } from "../../service/fireStoreCustomerService";
+import { getUsers } from "../../service/fireStoreDoctorService";
 
 const Statistics = () => {
-    const [doctors, setDoctors] = useState([]);
-    const [customers, setCustomers] = useState([]);
-    const [filterType, setFilterType] = useState("daily");
+    const [doctor, setDoctor] = useState([])
+    const [customer, setCustomer] = useState([])
+    const [filter, setFilter] = useState("monthly");
 
     useEffect(() => {
-        const unsubscribeDoctors = getUsers((doctorsData) => {
-            setDoctors(doctorsData);
-        });
-
-        return () => unsubscribeDoctors && unsubscribeDoctors(); 
+        const unsubscribe = getUsers(setDoctor);
+        return () => unsubscribe();
     }, []);
 
-
-
     useEffect(() => {
-        if (doctors.length === 0) return;
+        const unsubscribe = subscribeToCustomers(setCustomer);
+        return () => unsubscribe();
+    }, []);
 
-        const unsubscribeList = [];
+    const filterDataByDoctor = (doctorName) => {
+        return customer.filter((entry) => entry.name === doctorName);
+    };
 
-        doctors.forEach((doctor) => {
-            const unsubscribe = getCustomersByDoctor(doctor.id, filterType, (data) => {
-                setCustomers(prevCustomers => {
-                    const filtered = prevCustomers.filter(c => c.doctorId !== doctor.id);
-                    return [...filtered, ...data];
-                });
-            });
-            
-            unsubscribeList.push(unsubscribe);
+    const getFilteredData = (data) => {
+        const groupedData = {};
+        const currentDate = new Date();
+        let periods = [];
+
+        if (filter === "yearly") {
+            for (let i = 11; i >= 0; i--) {
+                const date = new Date(currentDate);
+                date.setMonth(currentDate.getMonth() - i);
+                periods.push(date.toLocaleString("default", { month: "long", year: "numeric" }));
+            }
+        } else if (filter === "monthly") {
+            for (let i = 30; i >= 0; i--) {
+                const date = new Date(currentDate);
+                date.setDate(currentDate.getDate() - i);
+                periods.push(date.toLocaleString("default", { day: "numeric", month: "long" }));
+            }
+        } else if (filter === "weekly") {
+            for (let i = 14; i >= 0; i--) {
+                const date = new Date(currentDate);
+                date.setDate(currentDate.getDate() - i);
+                periods.push(date.toLocaleString("default", { weekday: "long", month: "long", day: "numeric" }));
+            }
+        }
+
+        periods.forEach((period) => {
+            groupedData[period] = 0;
         });
 
-        return () => unsubscribeList.forEach(unsub => unsub && unsub()); 
-    }, [doctors, filterType]);
+        data.forEach((entry) => {
+            const date = new Date(entry.created_at);
+            const period = date.toLocaleString("default", {
+                year: filter === "yearly" ? "numeric" : undefined,
+                month: "long",
+                day: filter === "monthly" ? "numeric" : undefined,
+                weekday: filter === "weekly" ? "long" : undefined,
+            });
+            if (periods.includes(period)) {
+                groupedData[period]++;
+            }
+        });
 
-    
-
-    const groupByHour = (customers) => {
-        const result = [];
-        for (let hour = 0; hour < 24; hour++) {
-            const count = customers.filter(c => new Date(c.time).getHours() === hour).length;
-            result.push({ name: `${hour}:00`, value: count });
-        }
-        console.log(customers)       
-        return result;
-
+        return periods.map((period) => ({
+            period,
+            value: groupedData[period],
+        }));
     };
 
     return (
@@ -58,46 +79,49 @@ const Statistics = () => {
             <div className="statisticsContainer">
                 <div className="statisticsNavbar">
                     <h3>Barcha analizlar</h3>
-                    <Profile doctors={doctors} />
+                    <Profile />
+                </div>
+                <div className="filterButtons">
+                    <button onClick={() => setFilter("yearly")}>Yillik</button>
+                    <button onClick={() => setFilter("monthly")}>Oylik</button>
+                    <button onClick={() => setFilter("weekly")}>Haftalik</button>
                 </div>
                 <div className="statistics">
-                    <div className="allAnalysis">
-                        <div className="catigor">
-                            <h3>Korxonaning barcha analizlari</h3>
-                            <div className="date">
-                                <h3 onClick={() => setFilterType("daily")}>Kunlik</h3>
-                                <h3 onClick={() => setFilterType("weekly")}>Haftalik</h3>
-                                <h3 onClick={() => setFilterType("monthly")}>Oylik</h3>
-                                <h3 onClick={() => setFilterType("yearly")}>Yillik</h3>
-                            </div>
-                        </div>
+                    <div className="allAnalysis flex justify-start items-start gap-5">
+                        <h3>Korxonaning barcha analizlari</h3>
                         <ResponsiveContainer width="100%" height={350}>
-                            <LineChart data={groupByHour(customers)}>
-                                <Line type="monotone" dataKey="value" stroke="#37bcb9" />
+                            <LineChart data={getFilteredData(customer)}>
+                                <Line
+                                    type="monotone"
+                                    dataKey="value"
+                                    stroke="dodgerblue"
+                                />
                                 <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-                                <XAxis dataKey="name" />
+                                <XAxis dataKey="period" />
                                 <YAxis />
                                 <Tooltip />
                             </LineChart>
                         </ResponsiveContainer>
                     </div>
                     <div className="userCharts">
-                        {doctors.map((doctor, index) => {
-                            const doctorCustomers = customers.filter(c => c.doctorId === doctor.id);
-                            const hourlyData = groupByHour(doctorCustomers);
-
+                        {doctor.map((doctor, index) => {
+                            const doctorData = filterDataByDoctor(doctor.name);
+                            const filteredData = getFilteredData(doctorData);
                             return (
                                 <div className="allUserAnalytics" key={index}>
-                                    <div className="catigor">
-                                        <h3>Shifokor: {doctor.name}</h3>
-                                    </div>
+                                    <h4>{doctor.name}</h4>
                                     <ResponsiveContainer width="100%" height={350}>
-                                        <BarChart data={hourlyData}>
-                                            <XAxis dataKey="name" />
+                                        <LineChart data={filteredData}>
+                                            <Line
+                                                type="monotone"
+                                                dataKey="value"
+                                                stroke={index % 2 === 0 ? "dodgerblue" : "green"}
+                                            />
+                                            <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+                                            <XAxis dataKey="period" />
                                             <YAxis />
                                             <Tooltip />
-                                            <Bar dataKey="value" fill={index % 2 === 0 ? "dodgerblue" : "green"} />
-                                        </BarChart>
+                                        </LineChart>
                                     </ResponsiveContainer>
                                 </div>
                             );

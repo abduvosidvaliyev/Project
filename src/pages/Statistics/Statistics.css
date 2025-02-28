@@ -36,7 +36,7 @@
 .allAnalysis{
     width: 100%;
     height: auto;
-    padding: 10px 30px 20px;
+    padding: 10px 30px 0px;
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
@@ -83,4 +83,13 @@
     justify-content: flex-start;
     align-items: flex-start;
     gap: 30px;
+}
+
+.filterButtons{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    align-self: flex-end;
+    padding: 20px 30px 10px;
 }
