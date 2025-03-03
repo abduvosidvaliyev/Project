@@ -8,7 +8,7 @@ import { getUsers } from "../../service/fireStoreDoctorService";
 import { subscribeToAdmins } from "../../service/fireStoreAdminService";
 
 const Weitlist = ({ width1, addCustomer }) => {
-    const PINcode = JSON.parse(localStorage.getItem("PINcode"));
+    const PINcode = localStorage.getItem("PINcode");
     const [FirebaseUsers, setFirebaseUsers] = useState([]);
     const [FirebaseAdmin, setFirebaseAdmin] = useState([]);
     const [FirebaseCustomer, setFirebaseCustomers] = useState([]);
@@ -101,7 +101,7 @@ const Weitlist = ({ width1, addCustomer }) => {
                     </div>
                 ) : null}
 
-                <div className="customerPlus" onClick={() => FirebaseUsers.length < 0 ? addCustomer(true) : alert("Iltimos oldin doktor qo'shing")}>
+                <div className="customerPlus" onClick={() => FirebaseUsers.length >= 1 ? addCustomer(true) : alert("Iltimos oldin doktor qo'shing")}>
                     <h3>Mijoz qo'shish</h3>
                     <HiPlus />
                 </div>

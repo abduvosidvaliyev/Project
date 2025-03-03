@@ -76,6 +76,7 @@ const Alert1 = ({ alertShow, DelateNotify, ChengeNotify, userInformation, doctor
                     alertShow={alertShow}
                     userInfo={userInformation}
                     alertHid={setAlert1Hid}
+                    UserInformation={userInformation}
                 />
             )}
         </div>

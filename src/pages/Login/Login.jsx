@@ -25,7 +25,7 @@ const Login = () => {
             const user = admin || doctor;
             const firstName = user.name.split(" ")[0];
 
-            localStorage.setItem("PINcode", JSON.stringify(inputValue));
+            localStorage.setItem("PINcode", inputValue);
             localStorage.setItem("UserName", firstName);
             window.location.reload();
         }
@@ -54,18 +54,17 @@ const Login = () => {
         if (e.key === "Enter" || e.key === "NumpadEnter") {
             const doctor = FirebaseDoctor.find((item) => item.code === inputValue && item.name.split(" ")[0] === nameValue)
             const admin = FirebaseAdmin.find((item) => item.code === inputValue && item.name.split(" ")[0] === nameValue)
-            console.log(admin, doctor)
 
             if (admin || doctor) {
                 const user = admin || doctor;
                 const firstName = user.name.split(" ")[0];
 
-                localStorage.setItem("PINcode", JSON.stringify(inputValue));
-                localStorage.setItem("UserName", JSON.stringify(firstName));
+                localStorage.setItem("PINcode", inputValue)
+                localStorage.setItem("UserName", firstName)
                 window.location.reload();
             }
-            else if (inputValue && nameValue === "") {
-                e.preventDefault()
+            else if ((inputValue && nameValue) === "") {
+                alert("Iltimos ma'lumot kiriting")
             }
             else {
                 alert("Noto'g'ri PIN yoki Login");
@@ -119,19 +118,20 @@ const Login = () => {
                             placeholder="Name:"
                             onChange={(e) => setNameValue(e.target.value)}
                             value={nameValue}
-                            onKeyUp={(e) => UnlockEnter(e)}
                         />
-                        <input
-                            type={Type}
-                            onInput={() => setHid("block")}
-                            maxLength={4}
-                            placeholder="Parol:"
-                            onChange={(e) => setInputValue(e.target.value)}
-                            value={inputValue}
-                            onKeyUp={(e) => UnlockEnter(e)}
-                        />
-                        <FaRegEye className="w-5 h-5 cursor-pointer " style={{ display: Show }} onClick={show} />
-                        <FaRegEyeSlash className="w-5 h-5 cursor-pointer " style={{ display: Hid }} onClick={hid} />
+                        <div className="inpEyes">
+                            <input
+                                type={Type}
+                                onInput={() => setHid("block")}
+                                maxLength={4}
+                                placeholder="Parol:"
+                                onChange={(e) => setInputValue(e.target.value)}
+                                value={inputValue}
+                                onKeyUp={(e) => UnlockEnter(e)}
+                            />
+                            <FaRegEye className="w-5 h-5 cursor-pointer " style={{ display: Show }} onClick={show} />
+                            <FaRegEyeSlash className="w-5 h-5 cursor-pointer " style={{ display: Hid }} onClick={hid} />
+                        </div>
                     </div>
                     <button onClick={Unlock} disabled={inputValue && nameValue ? false : true}>Tizimga kirish</button>
                 </div>

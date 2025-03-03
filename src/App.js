@@ -10,15 +10,15 @@ const App = () => {
   const localCode = localStorage.getItem("PINcode");
   const localName = localStorage.getItem("UserName");
 
-  const array = (localCode && localName) ? <Home /> : <Login />;
+  const isAuthenticated = localCode && localName;
 
   return (
     <UserProvider>
       <Routes>
-        <Route path="/" element={array} />
-        <Route path="/weit" element={<Weit />} />
-        <Route path="/users" element={<Users />} />
-        <Route path="/statistics" element={<Statistics />} />
+        <Route path="/" element={isAuthenticated ? <Home /> : <Login />} />
+        <Route path="/weit" element={isAuthenticated ? <Weit /> : <Login />} />
+        <Route path="/users" element={isAuthenticated ? <Users /> : <Login />} />
+        <Route path="/statistics" element={isAuthenticated ? <Statistics /> : <Login />} />
       </Routes>
     </UserProvider>
   );

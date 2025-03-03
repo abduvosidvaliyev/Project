@@ -21,7 +21,9 @@ import { LuFilePenLine } from "react-icons/lu";
 const Home = () => {
     const { id, alert4Show, setAlert4Show } = useContext(UserContext)
 
-    const PINcode = JSON.parse(localStorage.getItem("PINcode"));
+    const PINcode = localStorage.getItem("PINcode");
+    console.log(PINcode)
+    
 
     const [FirebaseDoctor, setFirebaseDoctor] = useState([]);
     const [FirebaseAdmin, setFirebaseAdmin] = useState([]);
@@ -90,7 +92,7 @@ const Home = () => {
                 closeOnClick: true,
                 closeButton: false,
                 icon: false,
-                position: "bottom-right",
+                position: "top-right",
                 progressClassName: "progressRedBackground"
             }
         );
@@ -108,7 +110,7 @@ const Home = () => {
                 closeOnClick: true,
                 closeButton: false,
                 icon: false,
-                position: "bottom-right",
+                position: "top-right",
                 progressClassName: "progressGreenBackground"
             }
         );
@@ -126,7 +128,7 @@ const Home = () => {
                 closeOnClick: true,
                 closeButton: false,
                 icon: false,
-                position: "bottom-right",
+                position: "top-right",
                 progressClassName: "progressBlueBackground"
             }
         );
@@ -144,7 +146,7 @@ const Home = () => {
                 closeOnClick: true,
                 closeButton: false,
                 icon: false,
-                position: "bottom-right",
+                position: "top-right",
                 progressClassName: "progressGreenBackground"
             }
         );

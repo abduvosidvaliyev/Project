@@ -17,11 +17,12 @@ import { LuFilePenLine } from "react-icons/lu"
 import { RiDeleteBin6Line } from "react-icons/ri"
 
 const Users = () => {
+    const PINcode = localStorage.getItem("PINcode")
+    
     const [doctor, setUsers] = useState([]);
     const [FirebaseAdmin, setFirebaseAdmin] = useState([])
     const [FirebaseCustomers, setFirebaseCustomers] = useState([])
 
-    const PINcode = JSON.parse(localStorage.getItem("PINcode"))
 
     useEffect(() => {
         const unsubscribe = getUsers(setUsers);
@@ -112,7 +113,7 @@ const Users = () => {
                 closeOnClick: true,
                 closeButton: false,
                 icon: false,
-                position: "bottom-right",
+                position: "top-right",
                 progressClassName: "progressRedBackground"
             }
         );
@@ -130,7 +131,7 @@ const Users = () => {
                 closeOnClick: true,
                 closeButton: false,
                 icon: false,
-                position: "bottom-right",
+                position: "top-right",
                 progressClassName: "progressGreenBackground"
             }
         );
@@ -148,7 +149,7 @@ const Users = () => {
                 closeOnClick: true,
                 closeButton: false,
                 icon: false,
-                position: "bottom-right",
+                position: "top-right",
                 progressClassName: "progressBlueBackground"
             }
         );
@@ -166,7 +167,7 @@ const Users = () => {
                 closeOnClick: true,
                 closeButton: false,
                 icon: false,
-                position: "bottom-right",
+                position: "top-right",
                 progressClassName: "progressGreenBackground"
             }
         );

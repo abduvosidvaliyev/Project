@@ -8,7 +8,7 @@ import { useEffect, useState } from "react"
 import { getUsersId, updateUser } from "../../service/fireStoreDoctorService"
 import { getCustomers, getCustomersByDoctorId, updateCustomers } from "../../service/fireStoreCustomerService"
 
-const Alert2 = ({ alertShow, chengeNotify, alertHid, userInfo }) => {
+const Alert2 = ({ alertShow, UserInformation, chengeNotify, alertHid, userInfo }) => {
 
     const [Name, setName] = useState("")
     const [Number, setNumber] = useState("")
@@ -72,12 +72,12 @@ const Alert2 = ({ alertShow, chengeNotify, alertHid, userInfo }) => {
                 <IoClose onClick={() => alertShow(false)} />
             </div>
             <div className="inputs">
-                <input type="text" onChange={(e) => setName(e.target.value)} placeholder="Hodim ism familiyasi:" />
-                <input type="text" onChange={(e) => setNumber(e.target.value)} placeholder="Telefon raqami: " />
-                <input type="text" onChange={(e) => setJob(e.target.value)} placeholder="Yo'nalish" />
-                <input type="text" onChange={(e) => setCode(e.target.value)} placeholder="Parol" />
-                <input type="text" onChange={(e) => setMoney(e.target.value)} placeholder="Maosh" />
-                <input type="date" onChange={(e) => setData(e.target.value)} placeholder="dd/mm/yyyy" />
+                <input type="text" value={UserInformation.name} onChange={(e) => setName(e.target.value)} placeholder="Hodim ism familiyasi:" /> 
+                <input type="text" value={UserInformation.number} onChange={(e) => setNumber(e.target.value)} placeholder="Telefon raqami: " />
+                <input type="text" value={UserInformation.job} onChange={(e) => setJob(e.target.value)} placeholder="Yo'nalish" /> 
+                <input type="text" value={UserInformation.code} onChange={(e) => setCode(e.target.value)} placeholder="Parol" />
+                <input type="text" value={UserInformation.money} onChange={(e) => setMoney(e.target.value)} placeholder="Maosh" />
+                <input type="date" value={UserInformation.year} onChange={(e) => setData(e.target.value)} placeholder="dd/mm/yyyy" />
             </div>
             <div className="buttons">
                 <button

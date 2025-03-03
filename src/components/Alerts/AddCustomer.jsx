@@ -10,6 +10,9 @@ const AddCustomer = ({ firebaseUser, firebaseCustomer, AddNotify, AddCustomers }
     const [selectValue, setSelectValue] = useState("")
     const [customerName, setCustomerName] = useState("")
     const [phoneNumber, setPhoneNumber] = useState("")
+
+    console.log(firebaseUser);
+    
     
     const AddCustomer = async () => {        
         if (!selectValue || !customerName || !phoneNumber) {
@@ -19,7 +22,6 @@ const AddCustomer = ({ firebaseUser, firebaseCustomer, AddNotify, AddCustomers }
 
         AddCustomers(false);
         AddNotify()
-        
         
         const newCustomer = {
             id: firebaseCustomer.length + 1,
@@ -55,7 +57,7 @@ const AddCustomer = ({ firebaseUser, firebaseCustomer, AddNotify, AddCustomers }
                         <select style={{ color: selectValue === "" ? "#a5b1c1" : "#000" }} onChange={(e) => setSelectValue(e.target.value)} >
                             <option value="" hidden={true}>Kimga biriktiriladi</option>
                             {
-                                firebaseUser.map(item =>
+                                (firebaseUser || []).map(item =>
                                     <option value={item.name}>{item.name}</option>
                                 )
                             }

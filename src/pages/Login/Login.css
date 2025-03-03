@@ -15,7 +15,7 @@
 .login{
     width: 30%;
     height: 65%;
-    background: #ffffff50;
+    background: #78e2ff45;
     backdrop-filter: blur(5px);
     box-shadow: 0px 0px 15px #325b68;
     border-radius: 15px;
@@ -59,8 +59,18 @@
     border-radius: 30px;
 }
 
-.enterCode svg{
+.inpEyes{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.inpEyes input{
+    width: 100%;
+}
+
+.inpEyes svg{
     position: absolute;
     right: 90px;
-    top: 260px;
 }

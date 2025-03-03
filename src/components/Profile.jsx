@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom"
 
 
 const Profile = () => {
-    const PINcode = JSON.parse(localStorage.getItem("PINcode"));
+    const PINcode = localStorage.getItem("PINcode")
 
     const [FirebaseDoctor, setFirebaseDoctor] = useState([]);
     const [FirebaseAdmin, setFirebaseAdmin] = useState([]);

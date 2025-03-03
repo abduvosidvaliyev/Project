@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { GoHourglass } from "react-icons/go";
 
 const Navbar = () => {
-    const PINcode = JSON.parse(localStorage.getItem("PINcode"))
+    const PINcode = localStorage.getItem("PINcode")
     const [users, setUsers] = useState([]);
 
     useEffect(() => {

@@ -60,8 +60,8 @@ const Alert4 = ({ AlertHid, chengeNotify, cusInfo }) => {
                 </h3>
             </div>
             <div className="editInputs">
-                <input type="text" onChange={(e) => setName(e.target.value)} placeholder="Mijoz ism familyasi" />
-                <input type="text" onChange={(e) => setNumber(e.target.value)} placeholder="Telefon raqami: " />
+                <input type="text" value={cusInfo.name} onChange={(e) => setName(e.target.value)} placeholder="Mijoz ism familyasi" />
+                <input type="text" value={cusInfo.number} onChange={(e) => setNumber(e.target.value)} placeholder="Telefon raqami: " />
                 <select name="" onChange={(e) => setDoctor(e.target.value)} className="selectDoctor">
                     <option hidden={true} value="">Doktor tanlash</option>
 

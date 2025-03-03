@@ -13,7 +13,7 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { FiPlusCircle } from "react-icons/fi";
 
 const Weitlist = () => {
-    const PINcode = JSON.parse(localStorage.getItem("PINcode"))
+    const PINcode = localStorage.getItem("PINcode")
     const [users, setUsers] = useState([]);
     const [customers, setCustomers] = useState([]);
     const [filteredCustomers, setFilteredCustomers] = useState([]);
@@ -114,7 +114,7 @@ const Weitlist = () => {
                 closeOnClick: true,
                 closeButton: false,
                 icon: false,
-                position: "bottom-right",
+                position: "top-right",
                 progressClassName: "progressRedBackground"
             }
         );
@@ -132,7 +132,7 @@ const Weitlist = () => {
                 closeOnClick: true,
                 closeButton: false,
                 icon: false,
-                position: "bottom-right",
+                position: "top-right",
                 progressClassName: "progressGreenBackground"
             }
         );
@@ -150,7 +150,7 @@ const Weitlist = () => {
                 closeOnClick: true,
                 closeButton: false,
                 icon: false,
-                position: "bottom-right",
+                position: "top-right",
                 progressClassName: "progressBlueBackground"
             }
         );
@@ -168,7 +168,7 @@ const Weitlist = () => {
                 closeOnClick: true,
                 closeButton: false,
                 icon: false,
-                position: "bottom-right",
+                position: "top-right",
                 progressClassName: "progressGreenBackground"
             }
         );
