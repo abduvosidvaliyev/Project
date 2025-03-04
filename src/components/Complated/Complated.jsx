@@ -24,7 +24,7 @@ const Complated = ({ width2, firebaseDoctor, firebaseAdmin }) => {
                     Tugatildi
                 </h3>
             </div>
-            {/* <div className="complatedUser flex-wrap">
+            <div className="complatedUser flex-wrap">
                 {
                     FirebaseAdmin ? FirebaseCustomers.filter(item => item.complated === false)
                         .map((item, index) =>
@@ -58,7 +58,7 @@ const Complated = ({ width2, firebaseDoctor, firebaseAdmin }) => {
                                 </div>
                             )
                 }
-            </div> */}
+            </div>
         </section>
     )
 }
