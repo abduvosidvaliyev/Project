@@ -2,14 +2,14 @@ import "../../style/Alert4.css"
 import { AiOutlineCloseCircle } from "react-icons/ai"
 import { CiEdit } from "react-icons/ci"
 
-import { useContext, useEffect, useState } from "react"
-import UserContext from "../../Context/Context"
+import { useEffect, useState } from "react"
 import { getUsers } from "../../service/fireStoreDoctorService"
 import { subscribeToCustomerIds, updateCustomers } from "../../service/fireStoreCustomerService"
+import { useProductContext } from "../../Context/ProductProvider"
 
 const Alert4 = ({ AlertHid, chengeNotify, cusInfo }) => {
 
-    const { setAlert4Show } = useContext(UserContext);
+    const { setAlert4Show } = useProductContext()
 
     const [users, setUsers] = useState([]);
 

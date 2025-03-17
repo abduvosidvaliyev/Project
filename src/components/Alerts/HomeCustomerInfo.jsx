@@ -6,12 +6,12 @@ import { MdLibraryAddCheck } from "react-icons/md"
 import { RiDeleteBin5Fill } from "react-icons/ri"
 import Alert4 from "./ChengeCustomerInfo"
 import { subscribeToCustomerIds, updateCustomers } from "../../service/fireStoreCustomerService"
-import UserContext from "../../Context/Context"
+import { useProductContext } from "../../Context/ProductProvider"
 
 const Alert3 = ({ customerInfo, DelateNotify, ChengeNotify, CompletedNotify }) => {
     const [alertHid, setAlertHid] = useState(true)
 
-    const { setAlert4Show } = useContext(UserContext);
+    const { setAlert4Show } = useProductContext();
 
     const [deleteOpacity, setDeleteOpacity] = useState(0)
     const [deleteScale, setDeleteScale] = useState(0.8)

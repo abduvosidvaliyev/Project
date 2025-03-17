@@ -35,15 +35,25 @@
 }
 
 .inp input{
-    padding: 25px 5px !important;
+    padding: 22px 5px !important;
+    border: 3px solid #d9d9d9;
+}
+
+.inp input:focus{
+    border-color: #000;
 }
 
 .inp select{
     width: 100%;
-    padding: 15px 5px;
+    padding: 12px 5px;
     background: #d9d9d9;
     border-radius: 10px;
     outline: none;
+    border: 3px solid #d9d9d9;
+}
+
+.inp section:focus{
+    border-color: #000 !important;
 }
 
 .inp select option{

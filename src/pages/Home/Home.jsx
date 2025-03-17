@@ -1,16 +1,11 @@
 import "./Home.css";
 
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import Weitlist from "../../components/Weitlist/Weitlist";
 import Complated from "../../components/Complated/Complated";
 import Navbar from "../Navbar/Navbar";
 
-import UserContext from "../../Context/Context";
-
-import { subscribeToCustomers } from "../../service/fireStoreCustomerService";
 import Alert3 from "../../components/Alerts/HomeCustomerInfo";
-import { getUsers } from "../../service/fireStoreDoctorService";
-import { subscribeToAdmins } from "../../service/fireStoreAdminService";
 import Profile from "../../components/Profile";
 import AddCustomer from "../../components/Alerts/AddCustomer";
 import { toast, ToastContainer } from "react-toastify";
@@ -18,22 +13,16 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { FiPlusCircle } from "react-icons/fi";
 import { LuFilePenLine } from "react-icons/lu";
 
+import { useProductContext } from "../../Context/ProductProvider";
+
 const Home = () => {
-    const { id, alert4Show, setAlert4Show } = useContext(UserContext)
-
-    const PINcode = localStorage.getItem("PINcode");
-    console.log(PINcode)
-    
-
-    const [FirebaseDoctor, setFirebaseDoctor] = useState([]);
-    const [FirebaseAdmin, setFirebaseAdmin] = useState([]);
-    const [FirebaseCustomer, setFirebaseCustomers] = useState([]);
+    const { id, alert4Show, setAlert4Show, admins, users, custom, localCode } = useProductContext()   
 
     const [active, setActive] = useState("home");
     const [WeitlistShowHid, setWeitlistShowHid] = useState(true);
     const [WeitlistWidth, setWeitlistWidth] = useState("80%");
     const [CompletedShowHid, setCompletedShowHid] = useState(true);
-    const [ComplatedWidth, setComplatedWidth] = useState("300px");
+    const [ComplatedWidth, setComplatedWidth] = useState("300px");      
 
     const allPeges = () => {
         setActive("home");
@@ -57,26 +46,7 @@ const Home = () => {
         setCompletedShowHid(true);
     };
 
-    // **Doktorlarni olish (real vaqt rejimi)**
-    useEffect(() => {
-        const unsubscribe = getUsers(setFirebaseDoctor);
-        return () => unsubscribe();
-    }, []);
-
-    // **Adminlarni olish (real vaqt rejimi)**
-    useEffect(() => {
-        const unsubscribe = subscribeToAdmins(setFirebaseAdmin);
-        return () => unsubscribe();
-    }, []);
-
-    // **Mijozlarni olish (real vaqt rejimi)**
-    useEffect(() => {
-        const unsubscribe = subscribeToCustomers(setFirebaseCustomers);
-        return () => unsubscribe();
-    }, []);
-
-
-    const customerInfo = FirebaseCustomer.find(item => item.id === id);
+    const customerInfo = custom.find(item => item.id === id);
 
     const [addCustomerAlert, setAddCustomerAlert] = useState(false);
 
@@ -199,9 +169,9 @@ const Home = () => {
                     }
                     {CompletedShowHid ?
                         <Complated
-                            firebaseDoctor={FirebaseDoctor}
-                            firebaseAdmin={FirebaseAdmin}
-                            pinCode={PINcode}
+                            firebaseDoctor={users}
+                            firebaseAdmin={admins}
+                            pinCode={localCode}
                             width2={ComplatedWidth}
                         />
                         : ""
@@ -221,8 +191,8 @@ const Home = () => {
                 <AddCustomer
                     AddCustomers={setAddCustomerAlert}
                     AddNotify={addNotify}
-                    firebaseUser={FirebaseDoctor}
-                    firebaseCustomer={FirebaseCustomer}
+                    firebaseUser={users}
+                    firebaseCustomer={custom}
                 />
                 : ""
             }

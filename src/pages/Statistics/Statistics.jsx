@@ -1,28 +1,17 @@
 import "./Statistics.css";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Navbar from "../Navbar/Navbar";
 import Profile from "../../components/Profile";
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, } from "recharts";
-import { subscribeToCustomers } from "../../service/fireStoreCustomerService";
-import { getUsers } from "../../service/fireStoreDoctorService";
+import { useProductContext } from "../../Context/ProductProvider";
 
 const Statistics = () => {
-    const [doctor, setDoctor] = useState([])
-    const [customer, setCustomer] = useState([])
+    const { users, custom } = useProductContext()
+
     const [filter, setFilter] = useState("monthly");
 
-    useEffect(() => {
-        const unsubscribe = getUsers(setDoctor);
-        return () => unsubscribe();
-    }, []);
-
-    useEffect(() => {
-        const unsubscribe = subscribeToCustomers(setCustomer);
-        return () => unsubscribe();
-    }, []);
-
     const filterDataByDoctor = (doctorName) => {
-        return customer.filter((entry) => entry.name === doctorName);
+        return users.filter((entry) => entry.name === doctorName);
     };
 
     const getFilteredData = (data) => {
@@ -90,7 +79,7 @@ const Statistics = () => {
                     <div className="allAnalysis flex justify-start items-start gap-5">
                         <h3>Korxonaning barcha analizlari</h3>
                         <ResponsiveContainer width="100%" height={350}>
-                            <LineChart data={getFilteredData(customer)}>
+                            <LineChart data={getFilteredData(custom)}>
                                 <Line
                                     type="monotone"
                                     dataKey="value"
@@ -104,7 +93,7 @@ const Statistics = () => {
                         </ResponsiveContainer>
                     </div>
                     <div className="userCharts">
-                        {doctor.map((doctor, index) => {
+                        {users.map((doctor, index) => {
                             const doctorData = filterDataByDoctor(doctor.name);
                             const filteredData = getFilteredData(doctorData);
                             return (

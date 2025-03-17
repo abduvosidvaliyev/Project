@@ -9,8 +9,6 @@ const Complated = ({ width2, firebaseDoctor, firebaseAdmin }) => {
     const [FirebaseCustomers, setFirebaseCustomers] = useState([])
     const FirebaseDoctor = firebaseDoctor.find(item => item.code === PINcode)
     const FirebaseAdmin = firebaseAdmin.find(item => item.code === PINcode)
-
-    console.log(firebaseAdmin, PINcode);
     
     useEffect(() => {
         const unsubscribe = subscribeToCustomers(setFirebaseCustomers);

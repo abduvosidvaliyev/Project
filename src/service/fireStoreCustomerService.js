@@ -7,6 +7,7 @@ export const addCustomer = async (customerData) => {
     try {
         const customersRef = collection(db, "customers");
         const docRef = await addDoc(customersRef, customerData);
+        
         return { id: docRef.id, ...customerData };
     } catch (error) {
         console.error("Error adding customer: ", error);
@@ -17,6 +18,7 @@ export const addCustomer = async (customerData) => {
 // Foydalanuvchilarni o'qish (onSnapshot bilan)
 export const subscribeToCustomers = (callback) => {
     const q = query(collection(db, "customers"));
+    
     return onSnapshot(q, (querySnapshot) => {
         const customers = querySnapshot.docs.map((doc) => ({
             id: doc.id,

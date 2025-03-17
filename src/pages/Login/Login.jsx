@@ -1,11 +1,12 @@
 import "./Login.css"
 import background from "./Images/background.png"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa"
-import { onSnapshot, collection } from "firebase/firestore";
-import { db } from "../../firebase";
+import { useProductContext } from "../../Context/ProductProvider";
 
 const Login = () => {
+    const { admins, users } = useProductContext()
+
     const [inputValue, setInputValue] = useState("")
     const [nameValue, setNameValue] = useState("")
     const [eye, setEye] = useState(false)
@@ -14,12 +15,9 @@ const Login = () => {
     const [Show, setShow] = useState("none")
     const [Hid, setHid] = useState("none")
 
-    const [FirebaseAdmin, setFirebaseAdmin] = useState([])
-    const [FirebaseDoctor, setFirebaseDoctor] = useState([])
-
     const Unlock = () => {
-        const doctor = FirebaseDoctor.find((item) => item.code === inputValue && item.name.split(" ")[0] === nameValue)
-        const admin = FirebaseAdmin.find((item) => item.code === inputValue && item.name.split(" ")[0] === nameValue)
+        const doctor = users.find((item) => item?.code === inputValue)
+        const admin = admins.find((item) => item?.code === inputValue)
 
         if (admin || doctor) {
             const user = admin || doctor;
@@ -34,26 +32,10 @@ const Login = () => {
         }
     }
 
-    useEffect(() => {
-        const unsubscribe = onSnapshot(collection(db, "admins"), (snapshot) => {
-            const usersData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            setFirebaseAdmin(usersData);
-        });
-        return () => unsubscribe();
-    }, []);
-
-    useEffect(() => {
-        const unsubscribe = onSnapshot(collection(db, "users"), (snapshot) => {
-            const usersData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            setFirebaseDoctor(usersData);
-        });
-        return () => unsubscribe();
-    }, []);
-
     const UnlockEnter = (e) => {
         if (e.key === "Enter" || e.key === "NumpadEnter") {
-            const doctor = FirebaseDoctor.find((item) => item.code === inputValue && item.name.split(" ")[0] === nameValue)
-            const admin = FirebaseAdmin.find((item) => item.code === inputValue && item.name.split(" ")[0] === nameValue)
+            const doctor = users.find((item) => item.code === inputValue );
+            const admin = admins.find((item) => item.code === inputValue );
 
             if (admin || doctor) {
                 const user = admin || doctor;

@@ -1,43 +1,21 @@
 import "./Users.css"
 import Navbar from '../Navbar/Navbar'
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { FaSearch } from "react-icons/fa"
 import { HiPlus } from "react-icons/hi"
 import { BsFillGrid3X3GapFill, BsGridFill } from "react-icons/bs"
 import { TfiLayoutGrid4Alt } from "react-icons/tfi"
 import Alert1 from "../../components/Alerts/DoctorInfo"
-import { getUsers } from "../../service/fireStoreDoctorService"
 import Profile from "../../components/Profile"
 import AddUser from "../../components/Alerts/AddUser"
-import { subscribeToAdmins } from "../../service/fireStoreAdminService"
-import { subscribeToCustomers } from "../../service/fireStoreCustomerService"
 import { toast, ToastContainer } from "react-toastify"
 import { FiPlusCircle } from "react-icons/fi"
 import { LuFilePenLine } from "react-icons/lu"
 import { RiDeleteBin6Line } from "react-icons/ri"
+import { useProductContext } from "../../Context/ProductProvider"
 
 const Users = () => {
-    const PINcode = localStorage.getItem("PINcode")
-    
-    const [doctor, setUsers] = useState([]);
-    const [FirebaseAdmin, setFirebaseAdmin] = useState([])
-    const [FirebaseCustomers, setFirebaseCustomers] = useState([])
-
-
-    useEffect(() => {
-        const unsubscribe = getUsers(setUsers);
-        return () => unsubscribe();
-    }, []);
-
-    useEffect(() => {
-        const unsubscribe = subscribeToCustomers(setFirebaseCustomers);
-        return () => unsubscribe();
-    }, []);
-
-    useEffect(() => {
-        const unsubscribe = subscribeToAdmins(setFirebaseAdmin);
-        return () => unsubscribe();
-    }, []);
+    const { users } = useProductContext()
 
     const [CardWidth, setCardWidth] = useState("32%")
     const [CardContent, setCardContent] = useState("flex-start")
@@ -72,19 +50,19 @@ const Users = () => {
     const [sortedDoctors, setSortedDoctors] = useState([]);
 
     useEffect(() => {
-        setSortedDoctors(doctor);
-    }, [doctor]);
+        setSortedDoctors(users);
+    }, [users]);
 
     const alphaFilter = (e) => {
         const value = e.target.value;
         if (value === "alifbo") {
-            setSortedDoctors([...doctor].sort((a, b) => a.name.localeCompare(b.name)));
+            setSortedDoctors([...users].sort((a, b) => a.name.localeCompare(b.name)));
         }
         else if (value === "tes") {
-            setSortedDoctors([...doctor].sort((a, b) => b.name.localeCompare(a.name)));
+            setSortedDoctors([...users].sort((a, b) => b.name.localeCompare(a.name)));
         }
         else if (value === "yil") {
-            setSortedDoctors(doctor);
+            setSortedDoctors(users);
         }
     };
 
@@ -95,7 +73,7 @@ const Users = () => {
 
     const alertInformation = (name) => {
         setAlertShow(true)
-        let information = doctor.find(item => item.name === name)
+        let information = users.find(item => item.name === name)
         setUserInformation(information)
     }
 
@@ -179,7 +157,7 @@ const Users = () => {
             <div className="userContainer">
                 <div className="userNav">
                     <h3>
-                        Barcha hodimlar: {doctor.length}
+                        Barcha hodimlar: {users.length}
                     </h3>
                     <Profile />
                 </div>
@@ -243,7 +221,7 @@ const Users = () => {
             <ToastContainer />
             {alertShow ?
                 <Alert1
-                    doctor={doctor}
+                    doctor={users}
                     alertShow={setAlertShow}
                     userInformation={userInformation}
                     DelateNotify={delateNotify}
@@ -253,9 +231,8 @@ const Users = () => {
             }
             {addUser ?
                 <AddUser
-                    Users={setUsers}
                     AddUser={setAddUser}
-                    doctor={doctor}
+                    doctor={users}
                     AddNotify={addNotify}
                 />
                 : ""
