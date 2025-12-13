@@ -16,15 +16,15 @@ const Login = () => {
     const [Hid, setHid] = useState("none")
 
     const Unlock = () => {
-        const doctor = users.find((item) => item?.code === inputValue)
-        const admin = admins.find((item) => item?.code === inputValue)
+        // const doctor = users.find((item) => item?.code === inputValue)
+        // const admin = admins.find((item) => item?.code === inputValue)
 
-        if (admin || doctor) {
-            const user = admin || doctor;
-            const firstName = user.name.split(" ")[0];
+        if (inputValue === "0915") {
+            // const user = admin || doctor;
+            // const firstName = user.name.split(" ")[0];
 
             localStorage.setItem("PINcode", inputValue);
-            localStorage.setItem("UserName", firstName);
+            localStorage.setItem("UserName", "Abduvosid");
             window.location.reload();
         }
         else {
